@@ -19,8 +19,9 @@ import (
 )
 
 type nftService struct {
-	adminAccount  types.Account
+	feePayer      types.Account
 	parserService domains.IParserService
+	net           string
 }
 
 func newNFTService(
@@ -28,6 +29,7 @@ func newNFTService(
 ) domains.INFTService {
 	nftService := nftService{
 		parserService: parserService,
+		net:           rpc.DevnetRPCEndpoint,
 	}
 	nftService.parserService = parserService
 	nftService.loadAdminAccout()
@@ -112,7 +114,20 @@ func (s *nftService) loadAdminAccout() {
 		log.Fatalf("Failed to create account from bytes: %v", err)
 	}
 
-	s.adminAccount = account
+	s.feePayer = account
+}
+
+func (s *nftService) GetVersion() (string, error) {
+	// create a RPC client
+	c := client.NewClient(s.net)
+
+	// get the current running Solana version
+	response, err := c.GetVersion(context.TODO())
+	if err != nil {
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while getting solana version", err)
+	}
+
+	return response.SolanaCore, nil
 }
 
 func (s *nftService) MintNFT(userPublicKey string, nftID int) error {
@@ -122,12 +137,12 @@ func (s *nftService) MintNFT(userPublicKey string, nftID int) error {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while getting nft", err)
 	}
 
-	nftJsonData, err := json.Marshal(nftData)
+	nftJSONData, err := json.Marshal(nftData)
 	if err != nil {
 		return service_errors.NewServiceErrorWithMessageAndError(500, "error while getting json of the nft", err)
 	}
 
-	c := client.NewClient(rpc.TestnetRPCEndpoint)
+	c := client.NewClient(s.net)
 
 	// create an mint account
 	mint := types.NewAccount()
@@ -151,17 +166,17 @@ func (s *nftService) MintNFT(userPublicKey string, nftID int) error {
 	metadataAccount := types.NewAccount() // Create a new account for metadata
 	fmt.Println("metadata account:", metadataAccount.PublicKey.ToBase58())
 
-	fmt.Println("admin account: ", s.adminAccount.PublicKey)
+	fmt.Println("admin account: ", s.feePayer.PublicKey)
 
 	// FIXME: NEREDE BELLİ OLUACAK BU NFT NİN KİME GİDECEĞİ
 
 	tx, err := types.NewTransaction(types.NewTransactionParam{
 		Message: types.NewMessage(types.NewMessageParam{
-			FeePayer:        s.adminAccount.PublicKey,
+			FeePayer:        s.feePayer.PublicKey,
 			RecentBlockhash: res.Blockhash,
 			Instructions: []types.Instruction{
 				system.CreateAccount(system.CreateAccountParam{
-					From:     s.adminAccount.PublicKey,
+					From:     s.feePayer.PublicKey,
 					New:      mint.PublicKey,
 					Owner:    common.TokenProgramID,
 					Lamports: rentExemptionBalance,
@@ -170,25 +185,25 @@ func (s *nftService) MintNFT(userPublicKey string, nftID int) error {
 				token.InitializeMint(token.InitializeMintParam{
 					Decimals:   0, // 0 For NTFs
 					Mint:       mint.PublicKey,
-					MintAuth:   s.adminAccount.PublicKey, // common.PublicKeyFromString(userPublicKey)
+					MintAuth:   s.feePayer.PublicKey, // common.PublicKeyFromString(userPublicKey)
 					FreezeAuth: nil,
 				}),
 				// Create Metadata Account
 				system.CreateAccount(system.CreateAccountParam{
-					From:     s.adminAccount.PublicKey,
+					From:     s.feePayer.PublicKey,
 					New:      metadataAccount.PublicKey,
-					Owner:    common.MetaplexTokenMetaProgramID, //FIXME: Metadata program ID
-					Lamports: rentExemptionBalance,              // You may need to adjust this for metadata account size
-					Space:    uint64(len(nftJsonData)),          // This is a simplification, ensure it's the actual required size
+					Owner:    common.MetaplexTokenMetaProgramID,
+					Lamports: rentExemptionBalance,
+					Space:    uint64(len(nftJSONData)),
 				}),
 
 				// FIXME: FIX LAN BURAYI
 				token_metadata.CreateMetadataAccount(token_metadata.CreateMetadataAccountParam{
 					Metadata:                metadataAccount.PublicKey,
 					Mint:                    mint.PublicKey,
-					MintAuthority:           s.adminAccount.PublicKey,
-					Payer:                   s.adminAccount.PublicKey,
-					UpdateAuthority:         s.adminAccount.PublicKey,
+					MintAuthority:           s.feePayer.PublicKey,
+					Payer:                   s.feePayer.PublicKey,
+					UpdateAuthority:         s.feePayer.PublicKey,
 					UpdateAuthorityIsSigner: true, // Eğer güncelleme yetkisi imzalı olacaksa true
 					IsMutable:               true, // Metadata'nın güncellenebilir olup olmadığını belirtin
 					MintData: token_metadata.Data{
@@ -198,16 +213,16 @@ func (s *nftService) MintNFT(userPublicKey string, nftID int) error {
 						SellerFeeBasisPoints: uint16(nftData.SellerFeeBasisPoints), // Satış komisyonu
 						Creators: &[]token_metadata.Creator{
 							{
-								Address:  s.adminAccount.PublicKey, // Yaratıcının adresi
-								Verified: true,                     // Yaratıcının doğrulanıp doğrulanmadığı
-								Share:    100,                      // Yaratıcının payı (örn. %100)
+								Address:  s.feePayer.PublicKey, // Yaratıcının adresi
+								Verified: true,                 // Yaratıcının doğrulanıp doğrulanmadığı
+								Share:    100,                  // Yaratıcının payı (örn. %100)
 							},
 						},
 					},
 				}),
 			},
 		}),
-		Signers: []types.Account{s.adminAccount, mint},
+		Signers: []types.Account{s.feePayer, mint},
 	})
 	if err != nil {
 		log.Printf("generate tx error, err: %v\n", err)
@@ -217,7 +232,6 @@ func (s *nftService) MintNFT(userPublicKey string, nftID int) error {
 	if err != nil {
 		log.Printf("send tx error, err: %v\n", err)
 	}
-
 	log.Println("txhash:", txhash)
 
 	return nil

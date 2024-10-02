@@ -753,6 +753,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/nft/": {
+            "get": {
+                "description": "NFT Mint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web3NFT"
+                ],
+                "summary": "NFT Mint",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/road/answer/{programmingID}/{pathID}": {
             "post": {
                 "description": "This is for answering quests.",
@@ -1260,9 +1283,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/public/nft/": {
+        "/public/nft/version": {
             "get": {
-                "description": "NFT Mint",
+                "description": "Solana Version",
                 "consumes": [
                     "application/json"
                 ],
@@ -1272,7 +1295,7 @@ const docTemplate = `{
                 "tags": [
                     "Web3NFT"
                 ],
-                "summary": "NFT Mint",
+                "summary": "Solana Version",
                 "responses": {
                     "200": {
                         "description": "OK",

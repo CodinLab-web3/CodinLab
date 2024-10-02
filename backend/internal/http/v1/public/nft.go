@@ -7,20 +7,22 @@ import (
 
 func (h *PublicHandler) initNFTRoutes(root fiber.Router) {
 	nft := root.Group("/nft")
-	nft.Get("/", h.MintNft)
+
+	nft.Get("/version", h.Version)
 }
 
 // @Tags Web3NFT
-// @Summary NFT Mint
-// @Description NFT Mint
+// @Summary Solana Version
+// @Description Solana Version
 // @Accept json
 // @Produce json
 // @Success 200 {object} response.BaseResponse{}
-// @Router /public/nft/ [get]
-func (h *PublicHandler) MintNft(c *fiber.Ctx) error {
-	if err := h.services.NFTService.MintNFT("5c5P5Y5N8g4BvK3hUqEYdSTr5HWB3ToE59qgT3N4N48g", 1); err != nil {
+// @Router /public/nft/version [get]
+func (h *PublicHandler) Version(c *fiber.Ctx) error {
+	version, err := h.services.NFTService.GetVersion()
+	if err != nil {
 		return err
 	}
 
-	return response.Response(200, "Mint successful", nil)
+	return response.Response(200, "Version Recived successfully", version)
 }

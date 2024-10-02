@@ -727,6 +727,21 @@ paths:
       summary: GetSolutionsHoursByProgramming
       tags:
       - Log
+  /private/nft/:
+    get:
+      consumes:
+      - application/json
+      description: NFT Mint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: NFT Mint
+      tags:
+      - Web3NFT
   /private/road/{programmingID}:
     get:
       consumes:
@@ -1052,11 +1067,11 @@ paths:
       summary: Logout
       tags:
       - Auth
-  /public/nft/:
+  /public/nft/version:
     get:
       consumes:
       - application/json
-      description: NFT Mint
+      description: Solana Version
       produces:
       - application/json
       responses:
@@ -1064,7 +1079,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.BaseResponse'
-      summary: NFT Mint
+      summary: Solana Version
       tags:
       - Web3NFT
   /public/register:
