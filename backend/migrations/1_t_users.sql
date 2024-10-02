@@ -2,6 +2,7 @@
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS t_users (
     id TEXT PRIMARY KEY NOT NULL,
+    public_key TEXT,
     username TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     name TEXT NOT NULL,

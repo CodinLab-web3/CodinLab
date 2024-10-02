@@ -21,7 +21,9 @@ type IUserRepository interface {
 // IUserService is the interface that provides the methods for the user service.
 type IUserService interface {
 	Login(ctx context.Context, username, password string) (user *User, err error)
+	LoginWeb3(ctx context.Context, publicKey, message, signature string) (user *User, err error)
 	Register(ctx context.Context, username, name, surname, password, githubProfile string) (err error)
+	RegisterWeb3(ctx context.Context, publicKey, username, name, surname, password, githubProfile string) (err error)
 	CreateUser(ctx context.Context, username, name, surname, password, githubProfile string) (err error)
 	GetAllUsers(ctx context.Context) (users []User, err error)
 	GetProfile(ctx context.Context, userID string) (user *User, err error)
@@ -33,16 +35,18 @@ type IUserService interface {
 
 // UserFilter is the struct that represents the user filter.
 type UserFilter struct {
-	ID       uuid.UUID
-	Username string
-	Name     string
-	Surname  string
-	Role     string
+	ID        uuid.UUID
+	PublicKey string
+	Username  string
+	Name      string
+	Surname   string
+	Role      string
 }
 
 // User is the struct that represents the user.
 type User struct {
 	id            uuid.UUID
+	publicKey     string
 	username      string
 	password      string
 	name          string
@@ -54,7 +58,7 @@ type User struct {
 }
 
 // NewUser creates a new user.
-func NewUser(username, password, name, surname, role, githubProfile string, totalPoints int32) (*User, error) {
+func NewUser(publicKey, username, password, name, surname, role, githubProfile string, totalPoints int32) (*User, error) {
 	user := &User{}
 	if err := user.SetUsername(username); err != nil {
 		return nil, err
@@ -69,20 +73,23 @@ func NewUser(username, password, name, surname, role, githubProfile string, tota
 		return nil, err
 	}
 	user.SetID()
+	user.SetPublicKey(publicKey)
 	user.SetRole(role)
 	user.SetGithubProfile(githubProfile)
 	user.SetTotalPoints(totalPoints)
+
 	return user, nil
 }
 
 // Unmarshal unmarshals the user for database operations. It is used in the repository.
 func (u *User) Unmarshal(
 	id uuid.UUID,
-	username, password, name, surname, role, githubProfile string,
+	publicKey, username, password, name, surname, role, githubProfile string,
 	totalPoints int32,
 	createdAt time.Time,
 ) {
 	u.id = id
+	u.publicKey = publicKey
 	u.username = username
 	u.password = password
 	u.name = name
@@ -95,6 +102,10 @@ func (u *User) Unmarshal(
 
 func (u *User) ID() uuid.UUID {
 	return u.id
+}
+
+func (u *User) PublicKey() string {
+	return u.publicKey
 }
 
 func (u *User) Username() string {
@@ -192,6 +203,11 @@ func (u *User) SetUsername(username string) error {
 	u.username = username
 	return nil
 }
+
 func (u *User) SetID() {
 	u.id = uuid.New()
+}
+
+func (u *User) SetPublicKey(publicKey string) {
+	u.publicKey = publicKey
 }

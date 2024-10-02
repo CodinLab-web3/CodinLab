@@ -50,7 +50,7 @@ func (s *adminService) CreateUser(ctx context.Context, username, name, surname, 
 		return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
 	}
 
-	newUser, err := domains.NewUser(username, password, name, surname, "", githubProfile, 0)
+	newUser, err := domains.NewUser("", username, password, name, surname, "", githubProfile, 0)
 	if err != nil {
 		return err
 	}

@@ -72,6 +72,15 @@ definitions:
     - password
     - username
     type: object
+  dto.LoginWeb3DTO:
+    properties:
+      message:
+        type: string
+      publicKey:
+        type: string
+      signature:
+        type: string
+    type: object
   dto.PathDTO:
     properties:
       difficulty:
@@ -98,6 +107,30 @@ definitions:
         type: string
       password:
         minLength: 8
+        type: string
+      surname:
+        type: string
+      username:
+        maxLength: 30
+        minLength: 3
+        type: string
+    required:
+    - name
+    - password
+    - surname
+    - username
+    type: object
+  dto.RegisterWeb3DTO:
+    properties:
+      githubProfile:
+        maxLength: 30
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      publicKey:
         type: string
       surname:
         type: string
@@ -982,6 +1015,28 @@ paths:
       summary: Login
       tags:
       - Auth
+  /public/loginWeb3:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      parameters:
+      - description: Login
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginWeb3DTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Login
+      tags:
+      - Web3Auth
   /public/logout:
     post:
       consumes:
@@ -1019,6 +1074,28 @@ paths:
       summary: Register
       tags:
       - Auth
+  /public/registerWeb3:
+    post:
+      consumes:
+      - application/json
+      description: Register
+      parameters:
+      - description: Register
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterWeb3DTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Register
+      tags:
+      - Web3Auth
 securityDefinitions:
   ApiKeyAuth:
     in: cookie
