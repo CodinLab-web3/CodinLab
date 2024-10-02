@@ -1260,6 +1260,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/public/nft/": {
+            "get": {
+                "description": "NFT Mint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web3NFT"
+                ],
+                "summary": "NFT Mint",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/public/register": {
             "post": {
                 "description": "Register",
@@ -1441,10 +1464,10 @@ const docTemplate = `{
                 "message": {
                     "type": "string"
                 },
-                "publicKey": {
+                "publicKeyBase58": {
                     "type": "string"
                 },
-                "signature": {
+                "signatureBase58": {
                     "type": "string"
                 }
             }
@@ -1525,7 +1548,7 @@ const docTemplate = `{
                     "type": "string",
                     "minLength": 8
                 },
-                "publicKey": {
+                "publicKeyBase58": {
                     "type": "string"
                 },
                 "surname": {
