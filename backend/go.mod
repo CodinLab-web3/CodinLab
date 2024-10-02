@@ -3,6 +3,7 @@ module github.com/Yavuzlar/CodinLab
 go 1.21.1
 
 require (
+	github.com/btcsuite/btcutil v1.0.2
 	github.com/docker/docker v26.1.2+incompatible
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1

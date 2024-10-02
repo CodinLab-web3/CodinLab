@@ -7,6 +7,7 @@ type DTOManager struct {
 	HomeDTOManager  *HomeDTOManager
 	LabDTOManager   *LabDTOManager
 	AdminDTOManager *AdminDTOManager
+	Web3DTOManager  *Web3DTOManager
 }
 
 func CreateNewDTOManager() *DTOManager {
@@ -16,6 +17,7 @@ func CreateNewDTOManager() *DTOManager {
 	homeDTOManager := NewHomeDTOManager()
 	labDTOManager := NewLabDTOManager()
 	adminDTOManager := NewAdminDTOManager()
+	web3DTOManager := NewWeb3DTOManager()
 
 	return &DTOManager{
 		UserDTOManager:  &userDTOManager,
@@ -24,5 +26,6 @@ func CreateNewDTOManager() *DTOManager {
 		HomeDTOManager:  &homeDTOManager,
 		LabDTOManager:   &labDTOManager,
 		AdminDTOManager: &adminDTOManager,
+		Web3DTOManager:  web3DTOManager,
 	}
 }

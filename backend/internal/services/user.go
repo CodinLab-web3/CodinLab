@@ -6,6 +6,7 @@ import (
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 	hasher_service "github.com/Yavuzlar/CodinLab/pkg/hasher"
+	"github.com/Yavuzlar/CodinLab/pkg/solana"
 	"github.com/google/uuid"
 )
 
@@ -51,6 +52,28 @@ func (s *userService) Login(ctx context.Context, username, password string) (use
 	return user, nil
 }
 
+func (s *userService) LoginWeb3(ctx context.Context, publicKey, message, signature string) (user *domains.User, err error) {
+	ok, err := solana.VerifySignature(publicKey, message, signature)
+	if err != nil {
+		return nil, service_errors.NewServiceErrorWithMessageAndError(400, "error while verifing signature", err)
+	}
+	if !ok {
+		return nil, service_errors.NewServiceErrorWithMessage(400, "unable to verify the signature with the provided public key")
+	}
+	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{
+		PublicKey: publicKey,
+	}, 1, 1)
+	if err != nil {
+		return nil, service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+	}
+	if len(users) == 0 {
+		return nil, service_errors.NewServiceErrorWithMessage(400, "public key do not match")
+	}
+	user = &users[0]
+
+	return user, nil
+}
+
 func (s *userService) Register(ctx context.Context, username, name, surname, password, githubProfile string) (err error) {
 	// Checking the username is already being used
 	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{Username: username}, 1, 1)
@@ -62,7 +85,39 @@ func (s *userService) Register(ctx context.Context, username, name, surname, pas
 	}
 
 	// Creating New User Model
-	newUser, err := domains.NewUser(username, password, name, surname, "", githubProfile, 0)
+	newUser, err := domains.NewUser("", username, password, name, surname, "", githubProfile, 0)
+	if err != nil {
+		return err
+	}
+
+	// We save the new user to the database
+	if err = s.userRepositories.Add(ctx, newUser); err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "error while adding the user", err)
+	}
+
+	return
+}
+
+func (s *userService) RegisterWeb3(ctx context.Context, publicKey, username, name, surname, password, githubProfile string) (err error) {
+	// Checking the username is already being used
+	users, _, err := s.userRepositories.Filter(ctx, domains.UserFilter{Username: username}, 1, 1)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+	}
+	if len(users) != 0 {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
+	}
+
+	users, _, err = s.userRepositories.Filter(ctx, domains.UserFilter{PublicKey: publicKey}, 1, 1)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "error while filtering users", err)
+	}
+	if len(users) != 0 {
+		return service_errors.NewServiceErrorWithMessageAndError(400, "publickey already being used", err)
+	}
+
+	// Creating New User Model
+	newUser, err := domains.NewUser(publicKey, username, password, name, surname, "", githubProfile, 0)
 	if err != nil {
 		return err
 	}
@@ -86,7 +141,7 @@ func (s *userService) CreateUser(ctx context.Context, username, name, surname, p
 		return service_errors.NewServiceErrorWithMessageAndError(400, "username already being used", err)
 	}
 
-	newUser, err := domains.NewUser(username, password, name, surname, "", githubProfile, 0)
+	newUser, err := domains.NewUser("", username, password, name, surname, "", githubProfile, 0)
 	if err != nil {
 		return err
 	}
