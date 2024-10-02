@@ -1,0 +1,20 @@
+## FRONTEND
+
+
+int $funcname$() {
+
+    // Write your code here
+
+ return 0;
+}
+
+## DOCKER
+
+$imps$
+
+$usercode$
+
+int main(){
+   $funcname$();
+   return 0;
+}

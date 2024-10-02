@@ -1,0 +1,51 @@
+{
+	"id": 1,
+	"languages": [
+		{
+			"lang": "en",
+			"title": "Palindrome Checker",
+			"description": "Checks if a given string is a palindrome",
+			"note": "Questions Note",
+			"hint": "Compare characters from the beginning and end of the string moving towards the center."
+		},
+		{
+			"lang": "tr",
+			"title": "Palindrom Kontrolü",
+			"description": "Verilen kelimenin palindrom olup olmadığına bak.",
+			"note": "Sorunun Notu",
+			"hint": "Karakterleri dizinin başından ve sonundan merkeze doğru karşılaştır."
+		}
+	],
+	"quest": {
+		"difficulty": 1,
+		"funcName": "isPalindrome",
+		"tests": [
+			{
+				"input": ["madam"],
+				"output": [true]
+			},
+			{
+				"input": ["hello"],
+				"output": [false]
+			},
+			{
+				"input": ["racecar"],
+				"output": [true]
+			}
+		],
+		"codeTemplates": [
+			{
+				"programmingID": 1,
+				"templatePath" : "object/labs/1/c++.txt"
+			},
+			{
+				"programmingID": 2,
+				"templatePath" : "object/labs/1/go.txt"
+			},
+			{
+				"programmingID": 3,
+				"templatePath" : "object/labs/1/python.txt"
+			}
+		]
+	}
+}
