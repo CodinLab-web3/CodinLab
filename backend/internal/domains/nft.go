@@ -4,6 +4,7 @@ type INFTService interface {
 	GetNFTs() (nfts []NFTMetadata, err error)
 	GetNFTByID(id int) (*NFTMetadata, error)
 	MintNFT(userPublicKey string, nftID int) error
+	GetVersion() (string, error)
 }
 
 type NFTMetadata struct {

@@ -53,6 +53,7 @@ func (h *PrivateHandler) Init(router fiber.Router) {
 	h.initAdminRoutes(root)
 	h.initSocketRoutes(root)
 	h.initCommonRoutes(root)
+	h.initNFTRoutes(root)
 	// initialize routes
 
 }
