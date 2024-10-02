@@ -9,6 +9,28 @@ type IParserService interface {
 	GetWelcomeBanner() (content []WelcomeContent, err error)
 	GetLabBanner() (content []LabContent, err error)
 	GetRoadBanner() (content []RoadContent, err error)
+
+	GetNFTs() (nfts []NFTMetadataP, err error)
+	GetNFTByID(id int) (nft *NFTMetadataP, err error)
+}
+
+type NFTMetadataP struct {
+	ID                   int          `json:"id"`
+	Symbol               string       `json:"symbol"`
+	Name                 string       `json:"name"`
+	Description          string       `json:"description"`
+	Image                string       `json:"image"`
+	ExternalURL          string       `json:"external_url"`
+	AnimationURL         string       `json:"animation_url"`
+	Attributes           []AttributeP `json:"attributes"`
+	Creator              string       `json:"creator"`
+	SellerFeeBasisPoints int          `json:"seller_fee_basis_points"`
+}
+
+// Attribute, NFT'nin özelliklerini temsil eder
+type AttributeP struct {
+	TraitType string `json:"trait_type"`
+	Value     string `json:"value"`
 }
 
 // Inventory represents the information related to an item in inventory.

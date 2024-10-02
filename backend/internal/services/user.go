@@ -6,7 +6,7 @@ import (
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 	hasher_service "github.com/Yavuzlar/CodinLab/pkg/hasher"
-	"github.com/Yavuzlar/CodinLab/pkg/solana"
+	solana_service "github.com/Yavuzlar/CodinLab/pkg/solana"
 	"github.com/google/uuid"
 )
 
@@ -53,7 +53,7 @@ func (s *userService) Login(ctx context.Context, username, password string) (use
 }
 
 func (s *userService) LoginWeb3(ctx context.Context, publicKey, message, signature string) (user *domains.User, err error) {
-	ok, err := solana.VerifySignature(publicKey, message, signature)
+	ok, err := solana_service.VerifySignature(publicKey, message, signature)
 	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessageAndError(400, "error while verifing signature", err)
 	}

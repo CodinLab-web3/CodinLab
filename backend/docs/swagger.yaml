@@ -76,9 +76,9 @@ definitions:
     properties:
       message:
         type: string
-      publicKey:
+      publicKeyBase58:
         type: string
-      signature:
+      signatureBase58:
         type: string
     type: object
   dto.PathDTO:
@@ -130,7 +130,7 @@ definitions:
       password:
         minLength: 8
         type: string
-      publicKey:
+      publicKeyBase58:
         type: string
       surname:
         type: string
@@ -1052,6 +1052,21 @@ paths:
       summary: Logout
       tags:
       - Auth
+  /public/nft/:
+    get:
+      consumes:
+      - application/json
+      description: NFT Mint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: NFT Mint
+      tags:
+      - Web3NFT
   /public/register:
     post:
       consumes:

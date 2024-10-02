@@ -1,4 +1,4 @@
-package solana
+package solana_service
 
 import (
 	"crypto/ed25519"
@@ -10,7 +10,6 @@ import (
 // VerifySignature verifies a Solana signature
 func VerifySignature(pubKeyBase58 string, message string, signatureBase58 string) (bool, error) {
 	// 1. Public key'i base58 formatından byte array'e çevir
-	fmt.Println(pubKeyBase58)
 	pubKey := base58.Decode(pubKeyBase58)
 	if len(pubKey) != 32 {
 		return false, fmt.Errorf("invalid public key length: %d", len(pubKey))
@@ -19,7 +18,7 @@ func VerifySignature(pubKeyBase58 string, message string, signatureBase58 string
 	// 2. İmzayı base58 formatından byte array'e çevir
 	signature := base58.Decode(signatureBase58)
 	if len(signature) != ed25519.SignatureSize {
-		return false, fmt.Errorf("invalid public key length: %d", len(pubKey))
+		return false, fmt.Errorf("invalid public key length: %d", len(signature))
 	}
 
 	// 3. Mesajı byte array olarak al

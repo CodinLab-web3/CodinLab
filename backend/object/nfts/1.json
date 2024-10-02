@@ -1,0 +1,17 @@
+{
+    "name": "My Unique NFT",
+    "symbol": "NFT",
+    "description": "This is a description of my NFT.",
+    "image": "https://example.com/image.png",
+    "attributes": [
+      {
+        "trait_type": "Background",
+        "value": "Blue"
+      },
+      {
+        "trait_type": "Eyes",
+        "value": "Blue"
+      }
+    ]
+}
+  

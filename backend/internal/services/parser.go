@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
+	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 )
 
 type parserService struct {
@@ -71,6 +72,59 @@ func (s *parserService) GetInventory() (inventory []domains.InventoryP, err erro
 	err = json.Unmarshal(jsonData, &inventory)
 	if err != nil {
 		return nil, err
+	}
+
+	return
+}
+
+func (s *parserService) GetNFTs() (nfts []domains.NFTMetadataP, err error) {
+	// Check if the directory exists
+	err = s.checkDir("object")
+	if err != nil {
+		return
+	}
+
+	// Find JSON files for the lab
+	jsonFiles, err := s.findJSONFiles("object/nfts")
+	if err != nil {
+		return nil, err
+	}
+
+	// Loop through each JSON file
+	for _, file := range jsonFiles {
+		// Read the JSON file
+		jsonData, err := os.ReadFile(file)
+		if err != nil {
+			return nil, err
+		}
+
+		var nft domains.NFTMetadataP
+		err = json.Unmarshal(jsonData, &nft)
+		if err != nil {
+			return nil, err
+		}
+
+		nfts = append(nfts, nft)
+	}
+
+	return
+}
+
+func (s *parserService) GetNFTByID(id int) (nft *domains.NFTMetadataP, err error) {
+	if id == 0 {
+		return nil, service_errors.NewServiceErrorWithMessage(400, "invalid nft id")
+	}
+
+	nfts, err := s.GetNFTs()
+	if err != nil {
+		return nil, service_errors.NewServiceErrorWithMessage(400, "error while getting nfts")
+	}
+
+	for _, n := range nfts {
+		if n.ID == id {
+			nft = &n
+			break
+		}
 	}
 
 	return

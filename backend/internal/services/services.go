@@ -16,15 +16,14 @@ type Services struct {
 	AdminService   domains.IAdminService
 	CodeService    domains.ICodeService
 	LabRoadService domains.ILabRoadService
-	// diğer servisler buraya eklenecek
+
+	NFTService domains.INFTService
 }
 
 func CreateNewServices(
 	userRepositories domains.IUserRepository,
 	logRepositories domains.ILogRepository,
 	validatorService IValidatorService,
-	// diğer servisler buraya eklenecek
-
 ) *Services {
 	utilsService := newUtilService(validatorService)
 	parserService := newParserService(utilsService)
@@ -37,7 +36,8 @@ func CreateNewServices(
 	adminService := newAdminService(userRepositories, logService, parserService, levelService, utilsService)
 	labRoadService := newLabRoadService(parserService)
 	codeService := newCodeService(labRoadService, labService, roadService)
-	// diğer servisler buraya eklenecek
+
+	nftService := newNFTService(parserService)
 
 	return &Services{
 		UtilService:    utilsService,
@@ -51,8 +51,7 @@ func CreateNewServices(
 		AdminService:   adminService,
 		CodeService:    codeService,
 		LabRoadService: labRoadService,
-		// diğer servisler buraya eklenecek
-
+		NFTService:     nftService,
 	}
 }
 

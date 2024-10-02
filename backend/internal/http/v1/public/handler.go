@@ -39,4 +39,5 @@ func (h *PublicHandler) Init(router fiber.Router) {
 	})
 	// initialize routes
 	h.initUserRoutes(root)
+	h.initNFTRoutes(root)
 }
