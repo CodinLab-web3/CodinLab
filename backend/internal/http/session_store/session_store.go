@@ -10,17 +10,19 @@ import (
 )
 
 type SessionData struct {
-	UserID   string
-	Username string
-	Name     string
-	Surname  string
-	Role     string
+	UserID    string
+	PublicKey string
+	Username  string
+	Name      string
+	Surname   string
+	Role      string
 }
 
 func (s *SessionData) ParseFromUser(user *domains.User) {
 	if user.ID() != uuid.Nil {
 		s.UserID = user.ID().String()
 	}
+	s.PublicKey = user.PublicKey()
 	s.Username = user.Username()
 	s.Name = user.Name()
 	s.Surname = user.Surname()
