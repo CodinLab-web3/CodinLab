@@ -1,0 +1,43 @@
+version: '3.3'
+
+services:
+  api:
+    container_name: scodinlab-api
+    build:
+      context: ../backend/.
+      dockerfile: ../docker/backend/dev.Dockerfile
+    ports:
+      - 8080:8080
+    volumes:
+      - ../backend:/app
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker.sock ekleniyor
+    networks:
+      - scodinlab
+
+  frontend:
+    container_name: scodinlab-frontend
+    build:
+      context: ../frontend/.
+      dockerfile: ../docker/frontend/dev.Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ../frontend:/app
+    networks:
+      - scodinlab
+
+  nginx:
+    image: nginx:latest
+    container_name: scodinlab-nginx
+    restart: always
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - scodinlab
+
+networks:
+  scodinlab:
+    driver: bridge

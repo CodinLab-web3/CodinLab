@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  background-color: #daf0fe;
+  /* font-family: 'Outfit', sans-serif !important; */
+  font-family: "Outfit", sans-serif !important;
+}
+
+a {
+  text-decoration: none;
+  color: unset;
+}
+
+/* width */
+/* ::-webkit-scrollbar {
+    width: 0px;
+} */
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #525964;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #7a828e;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #bdc4cc;
+}
+
+.wallet-adapter-button-trigger {
+  background-color: #3894D0 !important;
+  border-radius: 0.938rem !important;
+  font-size: 1.125rem !important;
+  padding: 6px inherit !important;
+  height: 100% !important;
+}

@@ -1,0 +1,1015 @@
+basePath: /api/v1
+definitions:
+  dto.AdminUpdateUsersDTO:
+    properties:
+      githubProfile:
+        maxLength: 30
+        type: string
+      name:
+        type: string
+      role:
+        enum:
+        - admin
+        - user
+        - ""
+        type: string
+      surname:
+        type: string
+      username:
+        maxLength: 30
+        type: string
+    type: object
+  dto.AnswerLabDTO:
+    properties:
+      userCode:
+        type: string
+    type: object
+  dto.AnswerRoadDTO:
+    properties:
+      userCode:
+        description: "ProgrammingID int    `json:\"programmindID\"`\n\tPathID        int
+          \   `json:\"pathID\"`"
+        type: string
+    type: object
+  dto.LanguageRoadDTO:
+    properties:
+      content:
+        type: string
+      description:
+        type: string
+      lang:
+        type: string
+      note:
+        type: string
+      title:
+        type: string
+    type: object
+  dto.LogDTO:
+    properties:
+      content:
+        type: string
+      id:
+        type: string
+      labPathID:
+        type: integer
+      logType:
+        type: string
+      programmingID:
+        type: integer
+      userId:
+        type: string
+    type: object
+  dto.LoginDTO:
+    properties:
+      password:
+        minLength: 8
+        type: string
+      username:
+        maxLength: 30
+        minLength: 3
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  dto.PathDTO:
+    properties:
+      difficulty:
+        type: integer
+      id:
+        type: integer
+      language:
+        $ref: '#/definitions/dto.LanguageRoadDTO'
+      name:
+        type: string
+      pathIsFinished:
+        type: boolean
+      pathIsStarted:
+        type: boolean
+      template:
+        type: string
+    type: object
+  dto.RegisterDTO:
+    properties:
+      githubProfile:
+        maxLength: 30
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      surname:
+        type: string
+      username:
+        maxLength: 30
+        minLength: 3
+        type: string
+    required:
+    - name
+    - password
+    - surname
+    - username
+    type: object
+  dto.RoadDTO:
+    properties:
+      iconPath:
+        type: string
+      isImageExists:
+        type: boolean
+      name:
+        type: string
+      paths:
+        items:
+          $ref: '#/definitions/dto.PathDTO'
+        type: array
+      roadIsFinished:
+        type: boolean
+      roadIsStarted:
+        type: boolean
+    type: object
+  dto.SolutionsByDayDTO:
+    properties:
+      date:
+        type: string
+      labCount:
+        type: integer
+      roadCount:
+        type: integer
+    type: object
+  dto.SolutionsHoursByProgrammingDTO:
+    properties:
+      labHours:
+        type: number
+      programmingID:
+        type: integer
+      roadHours:
+        type: number
+    type: object
+  dto.StartDTO:
+    properties:
+      programmingID:
+        type: integer
+    type: object
+  dto.UpdatePasswordDTO:
+    properties:
+      confirmPassword:
+        minLength: 8
+        type: string
+      newPassword:
+        minLength: 8
+        type: string
+      password:
+        type: string
+    required:
+    - confirmPassword
+    - newPassword
+    - password
+    type: object
+  dto.UpdateUserDTO:
+    properties:
+      githubProfile:
+        maxLength: 30
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      surname:
+        type: string
+      username:
+        maxLength: 30
+        type: string
+    required:
+    - password
+    type: object
+  dto.UserDTO:
+    properties:
+      bestLanguage:
+        type: string
+      githubProfile:
+        type: string
+      name:
+        type: string
+      role:
+        type: string
+      surname:
+        type: string
+      username:
+        type: string
+    type: object
+  response.BaseResponse:
+    properties:
+      data: {}
+      data_count:
+        type: integer
+      errors: {}
+      message:
+        type: string
+      status_code:
+        type: integer
+    type: object
+host: localhost
+info:
+  contact: {}
+  description: API Service for CodinLab
+  title: API Service
+  version: v1
+paths:
+  /private/admin/user:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves All Users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get Users
+      tags:
+      - Admin
+  /private/admin/user/{userID}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes User
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Deletes User
+      tags:
+      - Admin
+    get:
+      consumes:
+      - application/json
+      description: Retrieves User Profile
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserDTO'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get Profile
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Updates User
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: New User Creds
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AdminUpdateUsersDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Updates User
+      tags:
+      - Admin
+  /private/common/stop/{containerID}:
+    get:
+      consumes:
+      - application/json
+      description: Stops Quest Tests
+      parameters:
+      - description: Container ID
+        in: path
+        name: containerID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Stops Quest Tests
+      tags:
+      - Common
+  /private/home/advancement:
+    get:
+      consumes:
+      - application/json
+      description: Get User Advancement
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserAdvancement
+      tags:
+      - Home
+  /private/home/development:
+    get:
+      consumes:
+      - application/json
+      description: Get User Development
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserDevelopment
+      tags:
+      - Home
+  /private/home/inventories:
+    get:
+      consumes:
+      - application/json
+      description: Get Inventories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetInventories
+      tags:
+      - Home
+  /private/home/level:
+    get:
+      consumes:
+      - application/json
+      description: Get User Level
+      parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserLevel
+      tags:
+      - Home
+  /private/lab/{labID}:
+    get:
+      consumes:
+      - application/json
+      description: Get Lab By Programming Language ID & Lab ID
+      parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
+      - description: Lab ID
+        in: path
+        name: labID
+        required: true
+        type: string
+      - description: Programming Language ID
+        in: query
+        name: programmingID
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetLabByID
+      tags:
+      - Lab
+  /private/lab/answer/{programmingID}/{labID}:
+    post:
+      consumes:
+      - application/json
+      description: This is for answering quests.
+      parameters:
+      - description: labID
+        in: path
+        name: labID
+        type: string
+      - description: programmingID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      - description: Answer Lab DTO
+        in: body
+        name: answerLabDTO
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AnswerLabDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Answer
+      tags:
+      - Lab
+  /private/lab/reset/{programmingID}/{labID}:
+    get:
+      consumes:
+      - application/json
+      description: Reset Lab By Programming Language ID & Lab ID
+      parameters:
+      - description: Lab ID
+        in: path
+        name: labID
+        required: true
+        type: string
+      - description: Programming Language ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: ResetLabHistory
+      tags:
+      - Lab
+  /private/labs/{programmingID}:
+    get:
+      consumes:
+      - application/json
+      description: Get Labs
+      parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
+      - description: Programming Language ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetLabs
+      tags:
+      - Lab
+  /private/labs/difficulty/stats:
+    get:
+      consumes:
+      - application/json
+      description: Get User Lab Difficulty Statistics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserLabDifficultyStats
+      tags:
+      - Lab
+  /private/labs/general/stats:
+    get:
+      consumes:
+      - application/json
+      description: Get User Programming Language Lab Statistics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserProgrammingLanguageLabStats
+      tags:
+      - Lab
+  /private/labs/progress/stats:
+    get:
+      consumes:
+      - application/json
+      description: Get User Lab Progress Statistics
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserLabProgressStats
+      tags:
+      - Lab
+  /private/log:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all logs based on the provided query parameters.
+      parameters:
+      - description: User ID
+        in: query
+        name: userID
+        type: string
+      - description: Programming ID
+        in: query
+        name: programmingID
+        type: integer
+      - description: Log Lab or Path ID
+        in: query
+        name: labRoadID
+        type: integer
+      - description: Log Content
+        in: query
+        name: content
+        type: string
+      - description: Log Type
+        in: query
+        name: type
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.LogDTO'
+                  type: array
+              type: object
+      summary: Get all logs
+      tags:
+      - Log
+  /private/log/lab:
+    get:
+      consumes:
+      - application/json
+      description: Add dummy data for testing
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: DummyLogData
+      tags:
+      - Log
+  /private/log/rates:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves language usage rates
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get Language Usage Rates
+      tags:
+      - Log
+  /private/log/road:
+    get:
+      consumes:
+      - application/json
+      description: Add dummy data for testing
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: DummyLogData
+      tags:
+      - Log
+  /private/log/solution/byday:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the number of lab and road solutions solved day by day.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SolutionsByDayDTO'
+                  type: array
+              type: object
+      summary: GetSolutionsByDay
+      tags:
+      - Log
+  /private/log/solution/hours:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the total hours spent on lab and road solutions for each
+        programming language in the last week.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dto.SolutionsHoursByProgrammingDTO'
+                  type: array
+              type: object
+      summary: GetSolutionsHoursByProgramming
+      tags:
+      - Log
+  /private/road/{programmingID}:
+    get:
+      consumes:
+      - application/json
+      description: Get Road with Paths
+      parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
+      - description: programmingID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.RoadDTO'
+              type: object
+      summary: GetRoads
+      tags:
+      - Road
+  /private/road/answer/{programmingID}/{pathID}:
+    post:
+      consumes:
+      - application/json
+      description: This is for answering quests.
+      parameters:
+      - description: Programming ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      - description: Path ID
+        in: path
+        name: pathID
+        required: true
+        type: string
+      - description: Answer Road DTO
+        in: body
+        name: answerRoadDTO
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AnswerRoadDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Answer
+      tags:
+      - Road
+  /private/road/general/stats:
+    get:
+      consumes:
+      - application/json
+      description: Gets users language road stats
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserLanguageRoadStats
+      tags:
+      - Road
+  /private/road/path/{programmingID}/{pathID}:
+    get:
+      consumes:
+      - application/json
+      description: Get Path By ID
+      parameters:
+      - description: Language
+        in: header
+        name: Language
+        type: string
+      - description: Programming ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      - description: Path ID
+        in: path
+        name: pathID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.PathDTO'
+              type: object
+      summary: GetPathByID
+      tags:
+      - Road
+  /private/road/progress/stats:
+    get:
+      consumes:
+      - application/json
+      description: Gets users road progress stats
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: GetUserRoadProgressStats
+      tags:
+      - Road
+  /private/road/reset/{programmingID}/{pathID}:
+    get:
+      consumes:
+      - application/json
+      description: Reset Path By Programming Language ID & Path ID
+      parameters:
+      - description: Path ID
+        in: path
+        name: pathID
+        required: true
+        type: string
+      - description: Programming Language ID
+        in: path
+        name: programmingID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: ResetPathHistory
+      tags:
+      - Road
+  /private/road/start:
+    post:
+      consumes:
+      - application/json
+      description: Start Road
+      parameters:
+      - description: Start
+        in: body
+        name: start
+        required: true
+        schema:
+          $ref: '#/definitions/dto.StartDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: StartRoad
+      tags:
+      - Road
+  /private/socket/ws:
+    get:
+      description: Initiates a WebSocket connection for real-time communication. Clients
+        can send and receive messages.
+      responses:
+        "101":
+          description: Connection Established
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Establish a WebSocket Connection
+      tags:
+      - WebSocket
+  /private/user/:
+    get:
+      consumes:
+      - application/json
+      description: Gets users profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.BaseResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.UserDTO'
+              type: object
+      summary: GetProfile
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Updates user
+      parameters:
+      - description: UpdateUser
+        in: body
+        name: update
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: UpdateUser
+      tags:
+      - User
+  /private/user/password:
+    put:
+      consumes:
+      - application/json
+      description: Updates users password
+      parameters:
+      - description: UpdatePassword
+        in: body
+        name: update
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePasswordDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: UpdatePassword
+      tags:
+      - User
+  /public/login:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      parameters:
+      - description: Login
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Login
+      tags:
+      - Auth
+  /public/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Logout
+      tags:
+      - Auth
+  /public/register:
+    post:
+      consumes:
+      - application/json
+      description: Register
+      parameters:
+      - description: Register
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Register
+      tags:
+      - Auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: cookie
+    name: session_id
+    type: apiKey
+swagger: "2.0"
