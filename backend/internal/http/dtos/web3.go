@@ -22,3 +22,8 @@ type RegisterWeb3DTO struct {
 	Password      string `json:"password" validate:"required,min=8"`
 	GithubProfile string `json:"githubProfile" validate:"max=30"`
 }
+
+type NFTMintDTO struct {
+	PublicKey string `json:"publicKeyBase58"`
+	NFTID     int    `json:"nftID"`
+}

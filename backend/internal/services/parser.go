@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
@@ -110,9 +111,13 @@ func (s *parserService) GetNFTs() (nfts []domains.NFTMetadataP, err error) {
 	return
 }
 
-func (s *parserService) GetNFTByID(id int) (nft *domains.NFTMetadataP, err error) {
-	if id == 0 {
+func (s *parserService) GetNFTByID(idStr string) (nft *domains.NFTMetadataP, err error) {
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
 		return nil, service_errors.NewServiceErrorWithMessage(400, "invalid nft id")
+	}
+	if id == 0 {
+		return nil, service_errors.NewServiceErrorWithMessage(400, "nft not found")
 	}
 
 	nfts, err := s.GetNFTs()
