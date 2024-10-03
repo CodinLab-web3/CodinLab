@@ -46,7 +46,12 @@ func (h *PublicHandler) Login(c *fiber.Ctx) error {
 	if err := sess.Save(); err != nil {
 		return err
 	}
-	loginResponse := h.dtoManager.UserDTOManager.ToLoginResponseDTO(userdata)
+
+	bestProgrammingLanguage, err := h.services.UserService.BestProgrammingLanguages(c.Context(), userdata.ID().String())
+	if err != nil {
+		return err
+	}
+	loginResponse := h.dtoManager.UserDTOManager.ToLoginResponseDTO(userdata, bestProgrammingLanguage)
 
 	return response.Response(200, "Login successful", loginResponse)
 }
@@ -81,7 +86,11 @@ func (h *PublicHandler) LoginWeb3(c *fiber.Ctx) error {
 	if err := sess.Save(); err != nil {
 		return err
 	}
-	loginResponse := h.dtoManager.UserDTOManager.ToLoginResponseDTO(userdata)
+	bestProgrammingLanguage, err := h.services.UserService.BestProgrammingLanguages(c.Context(), userdata.ID().String())
+	if err != nil {
+		return err
+	}
+	loginResponse := h.dtoManager.UserDTOManager.ToLoginResponseDTO(userdata, bestProgrammingLanguage)
 
 	return response.Response(200, "LoginWeb3 successful", loginResponse)
 }

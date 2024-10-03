@@ -29,3 +29,11 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: #bdc4cc;
 }
+
+.wallet-adapter-dropdown button {
+  background-color: #3894D0 !important;
+  border-radius: 0.938rem !important;
+  font-size: 1.125rem !important;
+  text-transform: none !important;
+  height: 100% !important;
+}

@@ -2,10 +2,8 @@ import { useTheme } from "@emotion/react";
 import { Circle, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
-  Checkbox,
   Container,
   FormControl,
-  FormControlLabel,
   Grid,
   InputAdornment,
   Card,
@@ -14,8 +12,8 @@ import {
   Typography,
   Link,
   Button,
-  Divider,
   IconButton,
+  useMediaQuery
 } from "@mui/material";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -25,13 +23,15 @@ import GirlImage from "src/assets/3d/3d-casual-life-girl-holding-laptop-and-havi
 import themeConfig from "src/configs/themeConfig";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "src/hooks/useAuth";
-const { default: BlankLayout } = require("src/layout/BlankLayout");
+import BlankLayout from "src/layout/BlankLayout";
+import LanguageSelector from "src/layout/components/navigation/item/LanguageSelector";
+import WalletConnectionButton from "src/components/Wallet/WalletConnectionButton";
 
 const Register = () => {
   const [formData, setFormData] = useState();
   const [errors, setErrors] = useState({});
   const [formSubmit, setFormSubmit] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(true);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -51,23 +51,32 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form submitted");
+
     setFormSubmit(true);
 
     const validationErrors = await registerValidation(formData);
     setErrors(validationErrors);
+    console.log("validationErrors");
 
     if (!isChecked) {
+      console.log("ischecked", isChecked);
       setErrors({ ...errors, checkbox: "You must accept" });
       return;
     }
     if (Object.keys(validationErrors).length > 0) {
+      console.log("validationErrors12323", validationErrors);
       console.log("Form has errors:", validationErrors);
       return;
     }
     // Call API
     try {
+      console.log("register try");
       await register(formData);
-    } catch (error) {}
+    } catch (error) {
+      console.log("Error:", error);
+
+    }
   };
 
   useEffect(() => {
@@ -83,6 +92,8 @@ const Register = () => {
   const theme = useTheme();
   const bgColor = theme.palette.primary.dark;
   const { t } = useTranslation();
+
+  const md_down = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
   const iconSize = {
     width: 30,
@@ -125,159 +136,172 @@ const Register = () => {
   };
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-      }}
-    >
+    <Box>
+      {md_down ? (
+        ""
+      ) : (
+        <Box sx={{ display: "flex", top: 0, right: 5, position: "absolute", gap: "1rem", alignItems: "center" }}>
+          <WalletConnectionButton />
+
+          <Button>
+            <LanguageSelector />
+          </Button>
+        </Box>
+      )}
+
       <Box
         sx={{
-          display: { xs: "none", mdlg: "block" },
-          position: "absolute",
-          top: "-6.5%",
-          left: {
-            mdlg: "%1",
-            lg: "3%",
-            lgPlus: "5%",
-            lgXl: "9%",
-            xl: "12%",
-            xxl: "18%",
-          },
-          zIndex: 1,
+          position: "relative",
         }}
       >
-        <Image src={CardImage} width={368} height={226} alt="Cards" />
-      </Box>
-      <Box
-        sx={{
-          display: { xs: "none", mdlg: "block" },
-          position: "absolute",
-          top: "3%",
-          right: {
-            mdlg: "-17%",
-            lg: "-10%",
-            lgPlus: "-5%",
-            lgXl: "2%",
-            xl: "4%",
-            xxl: "14%",
-          },
-          zIndex: 1,
-        }}
-      >
-        <Image
-          src={GirlImage}
-          width={368}
-          height={803}
-          priority
-          alt="Girl holding laptop"
-        />
-      </Box>
-      <Container sx={{ display: "flex", justifyContent: "center", mt: "4%" }}>
-        <Card
+        <Box
           sx={{
-            m: 1,
+            display: { xs: "none", mdlg: "block" },
+            position: "absolute",
+            top: "-6.5%",
+            left: {
+              mdlg: "%1",
+              lg: "3%",
+              lgPlus: "5%",
+              lgXl: "9%",
+              xl: "12%",
+              xxl: "18%",
+            },
+            zIndex: 1,
           }}
         >
-          <CardContent
+          <Image src={CardImage} width={368} height={226} alt="Cards" />
+        </Box>
+        <Box
+          sx={{
+            display: { xs: "none", mdlg: "block" },
+            position: "absolute",
+            top: "3%",
+            right: {
+              mdlg: "-17%",
+              lg: "-10%",
+              lgPlus: "-5%",
+              lgXl: "2%",
+              xl: "4%",
+              xxl: "14%",
+            },
+            zIndex: 1,
+          }}
+        >
+          <Image
+            src={GirlImage}
+            width={368}
+            height={803}
+            priority
+            alt="Girl holding laptop"
+          />
+        </Box>
+        <Container sx={{ display: "flex", justifyContent: "center", mt: "4%" }}>
+          <Card
             sx={{
-              width: { md: "auto", lg: "50.75rem" },
+              m: 1,
             }}
           >
-            <Grid
-              container
-              direction="column"
+            <CardContent
               sx={{
-                px: { xs: 2, sm: 4, md: 6, lg: 8, xl: 10, xxl: 12 },
+                width: { md: "auto", lg: "50.75rem" },
               }}
             >
-              <Box
+              <Grid
+                container
+                direction="column"
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: 1,
-                  my: 5,
+                  px: { xs: 2, sm: 4, md: 6, lg: 8, xl: 10, xxl: 12 },
                 }}
               >
-                <Circle sx={{ width: 40, height: 40, mr: 1 }} />
-                <Typography
-                  textAlign="center"
-                  variant="body1"
-                  fontFamily="Outfit"
-                  fontWeight="600"
-                  fontSize="35px"
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: 1,
+                    my: 5,
+                  }}
                 >
-                  {themeConfig.projectName}
-                </Typography>
-              </Box>
-              <FormControl>
-                <Grid container direction="column" gap={3}>
-                  <TextField
-                    name="name"
-                    placeholder={t("register.name")}
-                    variant="outlined"
-                    InputLabelProps={inputLabelStyle}
-                    onChange={handleChange}
-                    error={errors.name ? true : false}
-                    helperText={errors.name}
-                    sx={textFieldStyle}
-                  />
-                  <TextField
-                    name="surname"
-                    placeholder={t("register.surname")}
-                    InputLabelProps={inputLabelStyle}
-                    onChange={handleChange}
-                    error={errors.surname ? true : false}
-                    helperText={errors.surname}
-                    sx={textFieldStyle}
-                  />
-                  <TextField
-                    name="username"
-                    placeholder={t("register.username")}
-                    InputLabelProps={inputLabelStyle}
-                    onChange={handleChange}
-                    error={errors.username ? true : false}
-                    helperText={errors.username}
-                    sx={textFieldStyle}
-                  />
-                  <TextField
-                    name="githubProfile"
-                    placeholder={t("register.githubProfile")}
-                    InputLabelProps={inputLabelStyle}
-                    onChange={handleChange}
-                    error={errors.githubProfile ? true : false}
-                    helperText={errors.githubProfile}
-                    sx={textFieldStyle}
-                  />
-                  <TextField
-                    name="password"
-                    placeholder={t("register.password")}
-                    InputLabelProps={inputLabelStyle}
-                    type={showPassword ? "text" : "password"}
-                    onChange={handleChange}
-                    error={errors.password ? true : false}
-                    helperText={errors.password}
-                    sx={textFieldStyle}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment>
-                          <IconButton
-                            sx={{ zIndex: 999 }}
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                          >
-                            {showPassword ? (
-                              <VisibilityOff sx={{ color: "#000" }} />
-                            ) : (
-                              <Visibility sx={{ color: "#000" }} />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                  {/* CheckBox Start */}
-                  {/* <FormControlLabel
+                  <Circle sx={{ width: 40, height: 40, mr: 1 }} />
+                  <Typography
+                    textAlign="center"
+                    variant="body1"
+                    fontFamily="Outfit"
+                    fontWeight="600"
+                    fontSize="35px"
+                  >
+                    {themeConfig.projectName}
+                  </Typography>
+                </Box>
+                <FormControl>
+                  <Grid container direction="column" gap={3}>
+                    <TextField
+                      name="name"
+                      placeholder={t("register.name")}
+                      variant="outlined"
+                      InputLabelProps={inputLabelStyle}
+                      onChange={handleChange}
+                      error={errors.name ? true : false}
+                      helperText={errors.name}
+                      sx={textFieldStyle}
+                    />
+                    <TextField
+                      name="surname"
+                      placeholder={t("register.surname")}
+                      InputLabelProps={inputLabelStyle}
+                      onChange={handleChange}
+                      error={errors.surname ? true : false}
+                      helperText={errors.surname}
+                      sx={textFieldStyle}
+                    />
+                    <TextField
+                      name="username"
+                      placeholder={t("register.username")}
+                      InputLabelProps={inputLabelStyle}
+                      onChange={handleChange}
+                      error={errors.username ? true : false}
+                      helperText={errors.username}
+                      sx={textFieldStyle}
+                    />
+                    <TextField
+                      name="githubProfile"
+                      placeholder={t("register.githubProfile")}
+                      InputLabelProps={inputLabelStyle}
+                      onChange={handleChange}
+                      error={errors.githubProfile ? true : false}
+                      helperText={errors.githubProfile}
+                      sx={textFieldStyle}
+                    />
+                    <TextField
+                      name="password"
+                      placeholder={t("register.password")}
+                      InputLabelProps={inputLabelStyle}
+                      type={showPassword ? "text" : "password"}
+                      onChange={handleChange}
+                      error={errors.password ? true : false}
+                      helperText={errors.password}
+                      sx={textFieldStyle}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment>
+                            <IconButton
+                              sx={{ zIndex: 999 }}
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                            >
+                              {showPassword ? (
+                                <VisibilityOff sx={{ color: "#000" }} />
+                              ) : (
+                                <Visibility sx={{ color: "#000" }} />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    {/* CheckBox Start */}
+                    {/* <FormControlLabel
                     control={
                       <Checkbox
                         name="checkbox"
@@ -311,25 +335,25 @@ const Register = () => {
                       </Typography>
                     }
                   /> */}
-                  {/* CheckBox End */}
-                  <Button
-                    variant="dark"
-                    sx={{
-                      font: "normal normal 18px/23px Outfit",
-                      fontWeight: "600",
-                      textTransform: "capitalize",
-                      py: 2,
-                    }}
-                    onClick={handleSubmit}
-                    fullWidth
-                  >
-                    {t("register.signup")}
-                  </Button>
-                </Grid>
-              </FormControl>
-              {/* Divider and Google & GitHub Buttuns Start */}
-              {/* <Divider sx={{ mt: 3 }}> {t("register.or")}</Divider> */}
-              {/* <Stack direction="row" justifyContent="center" gap={3} mt={3}>
+                    {/* CheckBox End */}
+                    <Button
+                      variant="dark"
+                      sx={{
+                        font: "normal normal 18px/23px Outfit",
+                        fontWeight: "600",
+                        textTransform: "capitalize",
+                        py: 2,
+                      }}
+                      onClick={handleSubmit}
+                      fullWidth
+                    >
+                      {t("register.signup")}
+                    </Button>
+                  </Grid>
+                </FormControl>
+                {/* Divider and Google & GitHub Buttuns Start */}
+                {/* <Divider sx={{ mt: 3 }}> {t("register.or")}</Divider> */}
+                {/* <Stack direction="row" justifyContent="center" gap={3} mt={3}>
                 <IconButton variant="contained" sx={iconBtnStyle}>
                   <Google sx={iconSize} />
                 </IconButton>
@@ -337,26 +361,27 @@ const Register = () => {
                   <GitHub sx={iconSize} />
                 </IconButton>
               </Stack> */}
-              {/* Divider and Google & GitHub Buttuns End */}
-              <Typography
-                variant="body1"
-                textAlign={"center"}
-                mt={4}
-                fontFamily={"Outfit"}
-              >
-                {t("register.already")}
-                <Link
-                  href="/login"
-                  color={bgColor}
-                  sx={{ fontWeight: "600", textDecoration: "none", ml: 1 }}
+                {/* Divider and Google & GitHub Buttuns End */}
+                <Typography
+                  variant="body1"
+                  textAlign={"center"}
+                  mt={4}
+                  fontFamily={"Outfit"}
                 >
-                  {t("register.login")}
-                </Link>
-              </Typography>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Container>
+                  {t("register.already")}
+                  <Link
+                    href="/login"
+                    color={bgColor}
+                    sx={{ fontWeight: "600", textDecoration: "none", ml: 1 }}
+                  >
+                    {t("register.login")}
+                  </Link>
+                </Typography>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Container>
+      </Box>
     </Box>
   );
 };

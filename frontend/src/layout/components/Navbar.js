@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { useNav } from "src/hooks/useNav";
 import Logo from "../../assets/logo/codinlab-logo-light.png";
 import Image from "next/image";
+import WalletConnectionButton from "src/components/Wallet/WalletConnectionButton";
 
 function ResponsiveAppBar() {
   const { logout } = useAuth();
@@ -139,7 +140,11 @@ function ResponsiveAppBar() {
             {navigation.map((item, index) => (
               <NavItem key={index} {...item} />
             ))}
+
             <LanguageSelector />
+
+            <WalletConnectionButton />
+
             <IconButton
               onClick={handleLogout}
               sx={{
