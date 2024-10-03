@@ -15,13 +15,31 @@ import MenuIconBlack from "src/assets/icons/menu-black.png";
 import MenuIconWhite from "src/assets/icons/menu-white.png";
 import axios from "axios";
 
+<<<<<<< HEAD
 const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) => {
   const [value, setValue] = useState(defValue);
+=======
+const CodeEditor = ({
+  params,
+  onRun,
+  onStop,
+  leng,
+  defValue,
+  title,
+  apiData,
+  val,
+  editorRef
+}) => {
+  const [value, setValue] = useState(null);
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
   const [defaultValue, setDefaultValue] = useState(defValue);
   const [theme, setTheme] = useState("vs-dark");
   const [editorActionsWidth, setEditorActionsWidth] = useState(0);
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("smd"));
+<<<<<<< HEAD
   const editorRef = useRef(null);
+=======
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
   const editorActions = useRef(null);
 
   // here we will add the onMount function
@@ -74,9 +92,14 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
   }, [editorActions?.current?.offsetWidth]);
 
   useEffect(() => {
+<<<<<<< HEAD
     setDefaultValue(defValue);
     setValue(defValue);
   }, [defValue])
+=======
+    setValue(val);
+  }, [val]);
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 
   return (
     <Box
@@ -158,6 +181,7 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
                   onClick={openMobileMenu}
                 />
               </Tooltip>
+<<<<<<< HEAD
                 <Menu
                   anchorEl={mobileMenuAnchor}
                   open={Boolean(mobileMenuAnchor)}
@@ -211,6 +235,66 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
                     <Typography variant="span" sx={{ ml: 1 }}>Change Theme</Typography>                 
                   </MenuItem>
                 </Menu>
+=======
+              <Menu
+                anchorEl={mobileMenuAnchor}
+                open={Boolean(mobileMenuAnchor)}
+                onClose={closeMobileMenu}
+              >
+                <MenuItem
+                  onClick={() => {
+                    handleRun();
+                    closeMobileMenu();
+                  }}
+                >
+                  <Image
+                    src={theme === "vs-dark" ? PlayIconWhite : PlayIconBlack}
+                    alt="My SVG"
+                    width={30}
+                    height={30}
+                    sx={{ cursor: "pointer" }}
+                  />
+                  <Typography variant="span" sx={{ ml: 1 }}>
+                    Run
+                  </Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    handleStop();
+                    closeMobileMenu();
+                  }}
+                >
+                  <Image
+                    src={theme === "vs-dark" ? StopIconWhite : StopIconBlack}
+                    alt="My SVG"
+                    width={30}
+                    height={30}
+                    sx={{ cursor: "pointer" }}
+                  />
+                  <Typography variant="span" sx={{ ml: 1 }}>
+                    Stop
+                  </Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setTheme(theme === "vs-dark" ? "light" : "vs-dark");
+                    closeMobileMenu();
+                  }}
+                >
+                  <Image
+                    src={theme === "vs-dark" ? SunIcon : MoonIcon}
+                    alt="My SVG"
+                    width={30}
+                    height={30}
+                    sx={{ cursor: "pointer" }}
+                  />
+
+                  <Typography variant="span" sx={{ ml: 1 }}>
+                    Change Theme
+                  </Typography>
+                </MenuItem>
+              </Menu>
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
             </div>
           ) : (
             <div
@@ -286,7 +370,12 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
       >
         <Editor
           language={leng || "javascript"}
+<<<<<<< HEAD
           defaultValue={defaultValue || "// Write your code here"}
+=======
+          // defaultValue={defaultValue || "// Write your code here"}
+          defaultValue={"// Write your code here"}
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
           value={value}
           onChange={(newValue) => setValue(newValue)}
           onMount={onMount}
@@ -303,4 +392,8 @@ const CodeEditor = ({ params, onRun, onStop, leng, defValue, title, apiData }) =
   );
 };
 
+<<<<<<< HEAD
 export default CodeEditor;
+=======
+export default CodeEditor;
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75

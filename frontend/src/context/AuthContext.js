@@ -6,6 +6,8 @@ import { showToast } from "src/utils/showToast";
 import { t } from "i18next";
 // ** Spinner Import
 import Spinner from "src/components/spinner";
+// Wallet
+
 import { useWalletModal } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { SigninMessage } from "src/components/Wallet/SignInMessage";
@@ -31,6 +33,12 @@ const AuthProvider = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(
     defaultProvider.isInitialized
   );
+
+  // ** Wallet
+  const wallet = useWallet();
+  const { disconnect } = useWallet();
+  const walletModal = useWalletModal();
+
   const ws = useRef(null);
 
   const router = useRouter();
@@ -70,11 +78,13 @@ const AuthProvider = ({ children }) => {
   };
 
   const deleteStorage = () => {
+    if (wallet.connected) disconnect();
     setUser(null);
     setLoading(false);
     closeWebSocket();
     const firstPath = router.pathname.split("/")[1];
-    if (firstPath !== "login") router.replace("/login");
+    if (firstPath != "login")
+      if (firstPath != "register") router.replace("/login");
   };
 
   const handleLogout = async () => {
@@ -84,6 +94,10 @@ const AuthProvider = ({ children }) => {
         method: "POST",
       });
       if (response.status === 200) {
+        if (user) {
+          showToast("dismiss");
+          showToast("success", "Logged out successfully");
+        }
         deleteStorage();
       } else {
         showToast("dismiss");
@@ -91,13 +105,14 @@ const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       showToast("dismiss");
-      showToast("error", t(error.response.data.message));
+      showToast("error", t(error?.response?.data?.message));
     }
   };
 
   const initAuth = () => {
     setLoading(true);
     setIsInitialized(false);
+    if (router.pathname !== "/register") localStorage.removeItem("publicKey")
 
     axios({
       url: authConfig.account,
@@ -123,29 +138,34 @@ const AuthProvider = ({ children }) => {
           }
         } else {
           setLoading(false);
-          showToast("dismiss");
-          showToast("error", response.data.message);
+          // showToast("dismiss");
+          // showToast("error", response.data.message);
           handleLogout();
         }
       })
       .catch((error) => {
         setLoading(false);
-        showToast("dismiss");
-        showToast("error", t(error?.response?.data?.message ?? ""));
+        // showToast("dismiss");
+        // showToast("error", t(error?.response?.data?.message ?? ""));
         handleLogout();
       });
   };
 
   const handleRegister = async (formData) => {
+    let pKey = localStorage.getItem("publicKey")
+
+    let data = pKey ? { ...formData, publicKeyBase58: pKey } : formData;
+
     try {
       const response = await axios({
-        url: authConfig.register,
+        url: pKey ? authConfig.walletRegister : authConfig.register,
         method: "POST",
-        data: formData,
+        data: data,
       });
       if (response.status === 200) {
         showToast("dismiss");
         showToast("success", "Account created successfully");
+        localStorage.removeItem("publicKey");
         router.push("/login");
       } else {
         showToast("dismiss");
@@ -154,7 +174,7 @@ const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       showToast("dismiss");
-      showToast("error", t(error.response.data.message));
+      showToast("error", t(error?.response?.data?.message));
       handleLogout();
     }
   };
@@ -178,60 +198,94 @@ const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       showToast("dismiss");
-      showToast("error", t(error.response.data.message));
+      showToast("error", t(error?.response?.data?.message));
     }
   };
 
-  // ** Wallet
+  const handleWalletLogin = async (data) => {
+    try {
+      const response = await axios({
+        url: authConfig.walletLogin,
+        method: "POST",
+        data: data,
+      });
 
-  const wallet = useWallet();
-  const walletModal = useWalletModal();
+      if (response.status === 200) {
+        const user = response?.data?.data;
+        setUser(user);
+
+        showToast("dismiss");
+        showToast("success", "Logged in successfully");
+        router.push("/home");
+        webSocket();
+      } else {
+        showToast("dismiss");
+        showToast("error", response.data.message);
+      }
+    } catch (error) {
+      showToast("dismiss");
+      showToast("error", t(error?.response?.data?.message));
+
+      if (error?.response?.data?.message == "public key do not match") {
+        localStorage.setItem("publicKey", wallet.publicKey.toBase58());
+        router.push("/register");
+      }
+    }
+  };
 
   const handleSignIn = async () => {
     try {
-      if (!wallet.connected) {
-        walletModal.setVisible(true);
-      }
+      // if wallet is not connected then show wallet modal
+      if (!wallet.connected) walletModal.setVisible(true)
 
-      // const csrf = await getCsrfToken();
+      // if wallet public key or signMessage is not available then return
       if (!wallet.publicKey || !wallet.signMessage) return;
 
+      // if user already logged in do not then return 
+      if (user && user?.publicKey) return;
+
+      // create a new SigninMessage object
       const message = new SigninMessage({
         domain: window.location.host,
-        publicKey: wallet.publicKey?.toBase58(),
-        statement: `Sign this message to sign in to the app.`,
-        // nonce: csrf,
+        publicKey: wallet.publicKey.toBase58(),
+        statement: `Sign in to ${window.location.host}`,
       });
 
-      const data = new TextEncoder().encode(message.prepare());
-      const signature = await wallet.signMessage(data);
-      console.log("qweqweqe1", signature);
-      
-      const serializedSignature = binary_to_base58(signature);
+      const data = new TextEncoder().encode(message.prepare()); // encode the message
+      const signature = await wallet.signMessage(data); // sign the message
+      const serializedSignature = binary_to_base58(signature); // convert the signature to base58
 
-      console.log({
-        message: JSON.stringify(message),
-        redirect: false,
-        signature: serializedSignature,
+      // call the handleWalletLogin function with the message, public key and signature to communicate with the backend
+      handleWalletLogin({
+        message: message.statement, // message statement in plain text
+        publicKeyBase58: wallet.publicKey, // public key in base58
+        signatureBase58: serializedSignature, // signature in base58
       });
     } catch (error) {
       console.log(error);
     }
-  };
+  }
+
+  const openSignIn = () => {
+    const pKey = localStorage.getItem("publicKey") || null;
+
+    if (wallet.connected) { // if wallet is connected
+      if (!pKey) handleSignIn(); // if public key is not available in local storage then call handleSignIn function
+      else if (router.pathname !== "/register") router.push("/register") // if public key is available in local storage then redirect to register page
+    }
+  }
 
   useEffect(() => {
-    console.log("fdsfdsfdsf", wallet.connected);
-
-    // if (wallet.connected && status === "unauthenticated") {
-    if (wallet.connected) {
-      handleSignIn();
+    if (!wallet.connected && user?.publicKey) {
+      handleLogout()
+      return
     }
+
+    if (wallet.connected && !user?.publicKey) {
+      openSignIn()
+    } else initAuth();
   }, [wallet]);
   // ** Wallet
-
-  useEffect(() => {
-    initAuth();
-  }, []);
 
   const values = {
     user,

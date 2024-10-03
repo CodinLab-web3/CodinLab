@@ -16,6 +16,10 @@ type UserRepository struct {
 // dbModelUsers is the struct that represents the user in the database.
 type dbModelUsers struct {
 	ID            sql.NullString `db:"id"`
+<<<<<<< HEAD
+=======
+	PublicKey     sql.NullString `db:"public_key"`
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 	Username      sql.NullString `db:"username"`
 	Password      sql.NullString `db:"password"`
 	Name          sql.NullString `db:"name"`
@@ -30,6 +34,10 @@ type dbModelUsers struct {
 func (r *UserRepository) dbModelToAppModel(dbModel dbModelUsers) (user domains.User) {
 	user.Unmarshal(
 		uuid.MustParse(dbModel.ID.String),
+<<<<<<< HEAD
+=======
+		dbModel.PublicKey.String,
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 		dbModel.Username.String,
 		dbModel.Password.String,
 		dbModel.Name.String,
@@ -48,6 +56,13 @@ func (r *UserRepository) dbModelFromAppModel(domModel domains.User) (dbModel dbM
 		dbModel.ID.String = domModel.ID().String()
 		dbModel.ID.Valid = true
 	}
+<<<<<<< HEAD
+=======
+	if domModel.PublicKey() != "" {
+		dbModel.PublicKey.String = domModel.PublicKey()
+		dbModel.PublicKey.Valid = true
+	}
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 	if domModel.Username() != "" {
 		dbModel.Username.String = domModel.Username()
 		dbModel.Username.Valid = true
@@ -89,6 +104,13 @@ func (r *UserRepository) dbModelFromAppFilter(filter domains.UserFilter) (dbFilt
 		dbFilter.ID.String = filter.ID.String()
 		dbFilter.ID.Valid = true
 	}
+<<<<<<< HEAD
+=======
+	if filter.PublicKey != "" {
+		dbFilter.PublicKey.String = filter.PublicKey
+		dbFilter.PublicKey.Valid = true
+	}
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 	if filter.Username != "" {
 		dbFilter.Username.String = filter.Username
 		dbFilter.Username.Valid = true
@@ -122,6 +144,10 @@ func (r *UserRepository) Filter(ctx context.Context, filter domains.UserFilter, 
 		FROM t_users
 		WHERE
 		  (? IS NULL OR id = ?) AND
+<<<<<<< HEAD
+=======
+		  (? IS NULL OR public_key = ?) AND
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 		  (? IS NULL OR username like ('%' || ? || '%')) AND
 		  (? IS NULL OR name like ('%' || ? || '%')) AND
 		  (? IS NULL OR surname like ('%' || ? || '%')) AND
@@ -129,7 +155,11 @@ func (r *UserRepository) Filter(ctx context.Context, filter domains.UserFilter, 
 		ORDER BY created_at DESC
 		LIMIT ? OFFSET ?
 	`
+<<<<<<< HEAD
 	err = r.db.SelectContext(ctx, &dbResult, query, dbFilter.ID, dbFilter.ID, dbFilter.Username, dbFilter.Username, dbFilter.Name, dbFilter.Name, dbFilter.Surname, dbFilter.Surname, dbFilter.Role, dbFilter.Role, limit, (page-1)*limit)
+=======
+	err = r.db.SelectContext(ctx, &dbResult, query, dbFilter.ID, dbFilter.ID, dbFilter.PublicKey, dbFilter.PublicKey, dbFilter.Username, dbFilter.Username, dbFilter.Name, dbFilter.Name, dbFilter.Surname, dbFilter.Surname, dbFilter.Role, dbFilter.Role, limit, (page-1)*limit)
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 	if err != nil {
 		return
 	}
@@ -145,9 +175,15 @@ func (r *UserRepository) Add(ctx context.Context, user *domains.User) (err error
 	query := `
 		INSERT INTO 
 			t_users
+<<<<<<< HEAD
 		(id, username, password, name, surname, role, github_profile)
 			VALUES
 		(:id, :username, :password, :name, :surname, :role, :github_profile)
+=======
+		(id, public_key, username, password, name, surname, role, github_profile)
+			VALUES
+		(:id, :public_key, :username, :password, :name, :surname, :role, :github_profile)
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 	`
 	_, err = r.db.NamedExecContext(ctx, query, dbModel)
 	if err != nil {

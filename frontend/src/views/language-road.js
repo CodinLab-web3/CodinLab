@@ -4,7 +4,11 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import Tooltip from "@mui/material/Tooltip";
 import CodeEditor from "src/components/code-editor";
 import Output from "src/components/output";
+<<<<<<< HEAD
 import { useState, useEffect } from "react";
+=======
+import { useState, useEffect, useRef } from "react";
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 import CustomBreadcrumbs from "src/components/breadcrumbs";
 import DoneIcon from "src/assets/icons/icons8-done-100 (1).png";
 import Image from "next/image";
@@ -23,6 +27,10 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   const dispatch = useDispatch();
   const { path } = useSelector((state) => state);
+<<<<<<< HEAD
+=======
+  const editorRef = useRef(null);
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,7 +46,11 @@ const LanguageRoad = ({ language = "", pathId }) => {
   const [description, setDescription] = useState("");
   const [content, setContent] = useState("");
   const [note, setNote] = useState("");
+<<<<<<< HEAD
   const [template, setTemplate] = useState("asd");
+=======
+  const [template, setTemplate] = useState("");
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 
   useEffect(() => {
     setProgrammingId(getProgrammingId[language]);
@@ -77,7 +89,10 @@ const LanguageRoad = ({ language = "", pathId }) => {
 
   const handleRun = (outputData) => {
     // this function will be called when the code is run
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
     setOutput(outputData);
   };
 
@@ -98,7 +113,12 @@ const LanguageRoad = ({ language = "", pathId }) => {
         url: `/api/v1/private/road/reset/${programmingId}/${pathId}`,
       });
       if (response.status === 200) {
+<<<<<<< HEAD
         console.log("Reset response success", response.data);
+=======
+        const apiTemplate = response.data?.data?.template || "";
+        editorRef.current.setValue(apiTemplate);
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
       }
     } catch (error) {
       console.log("Reset response error", error);
@@ -130,7 +150,10 @@ const LanguageRoad = ({ language = "", pathId }) => {
       title: _language,
       permission: "roads",
     },
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
     {
       path: `/roads`,
       title: title,
@@ -166,7 +189,11 @@ const LanguageRoad = ({ language = "", pathId }) => {
           {!isFinished && (
             <Tooltip title={t("roads.path.restart.button")}>
               <Button
+<<<<<<< HEAD
               variant="dark"
+=======
+                variant="dark"
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
                 sx={{
                   position: "absolute",
                   right: "1rem",
@@ -202,14 +229,27 @@ const LanguageRoad = ({ language = "", pathId }) => {
       </Card>
       <Box sx={{ display: "flex", gap: 2 }}>
         <CodeEditor
+<<<<<<< HEAD
           key={template}
+=======
+          key={template} 
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
           params={params}
           onRun={handleRun}
           onStop={handleStop}
           leng={language}
+<<<<<<< HEAD
           defValue={template}
           title={"example.c"}
           apiData={apiData}
+=======
+          // defValue={template}
+          title={"example.c"}
+          apiData={apiData}
+          editorRef={editorRef}
+          val={template}
+
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         />
         <Output value={output} params={params} />
       </Box>
@@ -218,3 +258,9 @@ const LanguageRoad = ({ language = "", pathId }) => {
 };
 
 export default LanguageRoad;
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75

@@ -9,7 +9,11 @@
         "cmd": ["sh", "-c", "g++ -o main main.cpp && ./main"],
         "bashCmd":  ["bash", "-c", "./main.sh"],
         "fileExtension": "cpp",
+<<<<<<< HEAD
         "language": [
+=======
+        "languages": [
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
             {
                 "lang": "en",
                 "title": "What is C++",
@@ -32,7 +36,11 @@
         "cmd": ["sh","-c","go install golang.org/x/tools/cmd/goimports@latest && goimports -w ../main.go && go run ../main.go"],
         "bashCmd":  ["bash", "-c", "../main.sh"],
         "fileExtension": "go",
+<<<<<<< HEAD
         "language": [
+=======
+        "languages": [
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
             {
                 "lang": "en",
                 "title": "What is Go",
@@ -55,7 +63,11 @@
         "cmd": ["sh", "-c", "python ../main.py"],
         "bashCmd": ["bash", "-c", "../main.sh"],
         "fileExtension": "py",
+<<<<<<< HEAD
         "language": [
+=======
+        "languages": [
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
             {
                 "lang": "en",
                 "title": "What is Python",

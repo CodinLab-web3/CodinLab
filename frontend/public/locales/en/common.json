@@ -30,6 +30,10 @@
   "labs.sort_the_labs": "Sort the labs",
   "roads.search.placeholder": "Search in roads",
   "roads.sort_the_labs": "Sort the roads",
+<<<<<<< HEAD
+=======
+  "roads.path.start_road": "Start Road",
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
   "roads.path.next_path": "Next Path",
   "userlist.order.name": "Order",
   "userlist.username.name": "Username",

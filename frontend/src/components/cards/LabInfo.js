@@ -99,7 +99,20 @@ const LabInfo = ({ programingId }) => {
                 letterSpacing: "0",
               }}
               onClick={() => {
+<<<<<<< HEAD
                 router.push(`/labs/${programingId}/${lab.id}`);
+=======
+                // this router sistem will be changed to the following cuse this is not true.
+                // this is the try to solve the problem of the router.
+                // router.push(`/labs/${programingId}/${lab.id}`);
+                if(programingId === "1"){
+                  router.push(`/labs/c++/${lab.id}`);
+                }else if(programingId === "2"){
+                  router.push(`/labs/go/${lab.id}`);
+                }else if(programingId === "3"){
+                  router.push(`/labs/python/${lab.id}`);
+                }
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
               }
               }
             >

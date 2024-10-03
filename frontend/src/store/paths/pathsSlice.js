@@ -33,6 +33,10 @@ export const startRoad = createAsyncThunk(
   "road/startRoad",
   async (data, { rejectWithValue }) => {
     try {
+<<<<<<< HEAD
+=======
+      console.log("data", data);
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
       const response = await axios({
         method: "POST",
         url: "/api/v1/private/road/start",

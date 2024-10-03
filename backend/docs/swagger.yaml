@@ -72,6 +72,18 @@ definitions:
     - password
     - username
     type: object
+<<<<<<< HEAD
+=======
+  dto.LoginWeb3DTO:
+    properties:
+      message:
+        type: string
+      publicKeyBase58:
+        type: string
+      signatureBase58:
+        type: string
+    type: object
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
   dto.PathDTO:
     properties:
       difficulty:
@@ -111,8 +123,39 @@ definitions:
     - surname
     - username
     type: object
+<<<<<<< HEAD
   dto.RoadDTO:
     properties:
+=======
+  dto.RegisterWeb3DTO:
+    properties:
+      githubProfile:
+        maxLength: 30
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      publicKeyBase58:
+        type: string
+      surname:
+        type: string
+      username:
+        maxLength: 30
+        minLength: 3
+        type: string
+    required:
+    - name
+    - password
+    - surname
+    - username
+    type: object
+  dto.RoadDTO:
+    properties:
+      description:
+        type: string
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
       iconPath:
         type: string
       isImageExists:
@@ -127,6 +170,11 @@ definitions:
         type: boolean
       roadIsStarted:
         type: boolean
+<<<<<<< HEAD
+=======
+      title:
+        type: string
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
     type: object
   dto.SolutionsByDayDTO:
     properties:
@@ -690,6 +738,24 @@ paths:
       summary: GetSolutionsHoursByProgramming
       tags:
       - Log
+<<<<<<< HEAD
+=======
+  /private/nft/:
+    get:
+      consumes:
+      - application/json
+      description: NFT Mint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: NFT Mint
+      tags:
+      - Web3NFT
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
   /private/road/{programmingID}:
     get:
       consumes:
@@ -731,6 +797,13 @@ paths:
         name: programmingID
         required: true
         type: string
+<<<<<<< HEAD
+=======
+      - description: Language
+        in: header
+        name: Language
+        type: string
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
       - description: Path ID
         in: path
         name: pathID
@@ -833,6 +906,13 @@ paths:
         name: programmingID
         required: true
         type: string
+<<<<<<< HEAD
+=======
+      - description: Language
+        in: header
+        name: Language
+        type: string
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
       produces:
       - application/json
       responses:
@@ -970,6 +1050,31 @@ paths:
       summary: Login
       tags:
       - Auth
+<<<<<<< HEAD
+=======
+  /public/loginWeb3:
+    post:
+      consumes:
+      - application/json
+      description: Login
+      parameters:
+      - description: Login
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginWeb3DTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Login
+      tags:
+      - Web3Auth
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
   /public/logout:
     post:
       consumes:
@@ -985,6 +1090,24 @@ paths:
       summary: Logout
       tags:
       - Auth
+<<<<<<< HEAD
+=======
+  /public/nft/version:
+    get:
+      consumes:
+      - application/json
+      description: Solana Version
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Solana Version
+      tags:
+      - Web3NFT
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
   /public/register:
     post:
       consumes:
@@ -1007,6 +1130,31 @@ paths:
       summary: Register
       tags:
       - Auth
+<<<<<<< HEAD
+=======
+  /public/registerWeb3:
+    post:
+      consumes:
+      - application/json
+      description: Register
+      parameters:
+      - description: Register
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterWeb3DTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Register
+      tags:
+      - Web3Auth
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 securityDefinitions:
   ApiKeyAuth:
     in: cookie

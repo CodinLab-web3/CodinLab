@@ -753,6 +753,32 @@ const docTemplate = `{
                 }
             }
         },
+<<<<<<< HEAD
+=======
+        "/private/nft/": {
+            "get": {
+                "description": "NFT Mint",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web3NFT"
+                ],
+                "summary": "NFT Mint",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         "/private/road/answer/{programmingID}/{pathID}": {
             "post": {
                 "description": "This is for answering quests.",
@@ -776,6 +802,15 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
+<<<<<<< HEAD
+=======
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+                    },
+                    {
+                        "type": "string",
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
                         "description": "Path ID",
                         "name": "pathID",
                         "in": "path",
@@ -931,6 +966,15 @@ const docTemplate = `{
                         "name": "programmingID",
                         "in": "path",
                         "required": true
+<<<<<<< HEAD
+=======
+                    },
+                    {
+                        "type": "string",
+                        "description": "Language",
+                        "name": "Language",
+                        "in": "header"
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
                     }
                 ],
                 "responses": {
@@ -1191,6 +1235,43 @@ const docTemplate = `{
                 }
             }
         },
+<<<<<<< HEAD
+=======
+        "/public/loginWeb3": {
+            "post": {
+                "description": "Login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web3Auth"
+                ],
+                "summary": "Login",
+                "parameters": [
+                    {
+                        "description": "Login",
+                        "name": "login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.LoginWeb3DTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         "/public/logout": {
             "post": {
                 "description": "Logout",
@@ -1214,6 +1295,32 @@ const docTemplate = `{
                 }
             }
         },
+<<<<<<< HEAD
+=======
+        "/public/nft/version": {
+            "get": {
+                "description": "Solana Version",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web3NFT"
+                ],
+                "summary": "Solana Version",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         "/public/register": {
             "post": {
                 "description": "Register",
@@ -1247,6 +1354,43 @@ const docTemplate = `{
                     }
                 }
             }
+<<<<<<< HEAD
+=======
+        },
+        "/public/registerWeb3": {
+            "post": {
+                "description": "Register",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web3Auth"
+                ],
+                "summary": "Register",
+                "parameters": [
+                    {
+                        "description": "Register",
+                        "name": "register",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.RegisterWeb3DTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         }
     },
     "definitions": {
@@ -1355,6 +1499,23 @@ const docTemplate = `{
                 }
             }
         },
+<<<<<<< HEAD
+=======
+        "dto.LoginWeb3DTO": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "publicKeyBase58": {
+                    "type": "string"
+                },
+                "signatureBase58": {
+                    "type": "string"
+                }
+            }
+        },
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         "dto.PathDTO": {
             "type": "object",
             "properties": {
@@ -1411,9 +1572,51 @@ const docTemplate = `{
                 }
             }
         },
+<<<<<<< HEAD
         "dto.RoadDTO": {
             "type": "object",
             "properties": {
+=======
+        "dto.RegisterWeb3DTO": {
+            "type": "object",
+            "required": [
+                "name",
+                "password",
+                "surname",
+                "username"
+            ],
+            "properties": {
+                "githubProfile": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                },
+                "publicKeyBase58": {
+                    "type": "string"
+                },
+                "surname": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 3
+                }
+            }
+        },
+        "dto.RoadDTO": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
                 "iconPath": {
                     "type": "string"
                 },
@@ -1434,6 +1637,12 @@ const docTemplate = `{
                 },
                 "roadIsStarted": {
                     "type": "boolean"
+<<<<<<< HEAD
+=======
+                },
+                "title": {
+                    "type": "string"
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
                 }
             }
         },

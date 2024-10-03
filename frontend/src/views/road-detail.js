@@ -15,6 +15,10 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPaths, startRoad } from "src/store/paths/pathsSlice";
 import { getProgrammingId } from "src/data/programmingIds";
+<<<<<<< HEAD
+=======
+import { set } from "nprogress";
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 
 
 const RoadDetails = ({ language = "" }) => {
@@ -31,10 +35,19 @@ const RoadDetails = ({ language = "" }) => {
   const [programmingId, setProgrammingId] = useState(null);
 
   const [pathsDataContent, setPathsDataContent] = useState([]);
+<<<<<<< HEAD
   const [isStarted, setIsStarted] = useState(false); // Set this to true if the user has started the road on useEffect()
   const [amountOfInProgressPaths, setAmountOfInProgressPaths] = useState(0); // Amount of in progress paths
   const [amountOfCompletedPaths, setAmountOfCompletedPaths] = useState(0); // Amount of completed paths // Path icon path
   const [programmingIcon, setProgrammingIcon] = useState("images/c.png"); // Programming icon path
+=======
+  const [pathIsStarted, setpathIsStarted] = useState(false); // Set this to true if the user has started the road on useEffect()
+  const [amountOfInProgressPaths, setAmountOfInProgressPaths] = useState(0); // Amount of in progress paths
+  const [amountOfCompletedPaths, setAmountOfCompletedPaths] = useState(0); // Amount of completed paths // Path icon path
+  const [programmingIcon, setProgrammingIcon] = useState("images/c.png"); // Programming icon path
+  const [title, setTitle] = useState(""); // Road title
+  const [description, setDescription] = useState(""); // Road description
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 
   const handleStartRoad = () => {
     // Redirect to the first path of the road
@@ -43,9 +56,15 @@ const RoadDetails = ({ language = "" }) => {
   };
 
   const renderPathIcon = (path) => {
+<<<<<<< HEAD
     if (path.isFinished) {
       return DoneIcon;
     } else if (path.isStarted && !path.isFinished) {
+=======
+    if (path.pathIsFinished) {
+      return DoneIcon;
+    } else if (path.pathIsStarted && !path.pathIsFinished) {
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
       return NextPathIcon;
     } else {
       return LockIcon;
@@ -73,10 +92,17 @@ const RoadDetails = ({ language = "" }) => {
       if (paths.data.paths) {
         setProgrammingIcon(paths.data.iconPath);
 
+<<<<<<< HEAD
+=======
+        setTitle(paths.data.name);
+        setDescription(paths.data.description);
+
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         const pathsData = paths.data.paths;
 
 
         // Amount of completed paths
+<<<<<<< HEAD
         const completedPaths = pathsData.filter((path) => path.isFinished);
 
         // Amount of in progress paths
@@ -86,6 +112,17 @@ const RoadDetails = ({ language = "" }) => {
 
         if (inProgressPaths.length > 0 || completedPaths.length > 0) {
           setIsStarted(true);
+=======
+        const completedPaths = pathsData.filter((path) => path.pathIsFinished);
+
+        // Amount of in progress paths
+        const inProgressPaths = pathsData.filter(
+          (path) => !path.pathIsFinished && path.pathIsFinished
+        );
+
+        if (inProgressPaths.length > 0 || completedPaths.length > 0) {
+          setpathIsStarted(true);
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         }
 
         setAmountOfInProgressPaths(inProgressPaths.length);
@@ -125,9 +162,12 @@ const RoadDetails = ({ language = "" }) => {
   ];
 
   // TODO: Get the title and description from front-end side
+<<<<<<< HEAD
   const title = "What is /C/?";
   const description =
     "/C/ is a programming language created by Dennis Ritchie at Bell Laboratories in 1972. It is a popular language due to its foundational nature and close association with UNIX.";
+=======
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 
   return (
     <Box>
@@ -155,7 +195,11 @@ const RoadDetails = ({ language = "" }) => {
                   width={80}
                   height={80}
                 />
+<<<<<<< HEAD
                 {!isStarted ? (
+=======
+                {!pathIsStarted ? (
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
                   <>
                     <Box>
                       <Typography variant="h4" fontWeight={600}>
@@ -231,13 +275,20 @@ const RoadDetails = ({ language = "" }) => {
         </Grid>
       </Box>
 
+<<<<<<< HEAD
       {/* Road Paths */}
+=======
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
       {pathsDataContent.map((path, index) => (
         <Box key={index}>
           <Box
             sx={{
               borderWidth: 6,
+<<<<<<< HEAD
               borderColor: path.isFinished
+=======
+              borderColor: path.pathIsFinished
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
                 ? "#39CE19"
                 : theme.palette.primary.dark,
               borderStyle:
@@ -254,9 +305,15 @@ const RoadDetails = ({ language = "" }) => {
                 display: "flex",
                 gap: 2,
                 alignItems: "center",
+<<<<<<< HEAD
                 border: path.isFinished ? "3px solid #39CE19" : "none",
                 borderRadius: 6,
                 backgroundColor: path.isFinished
+=======
+                border: path.pathIsFinished ? "3px solid #39CE19" : "none",
+                borderRadius: 6,
+                backgroundColor: path.pathIsFinished
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
                   ? "#fff"
                   : theme.palette.primary.dark,
                 p: 3,
@@ -272,6 +329,7 @@ const RoadDetails = ({ language = "" }) => {
               <Typography
                 variant="body1"
                 fontWeight={600}
+<<<<<<< HEAD
                 color={!path.isFinished ? "#fff" : "#0A3B7A"}
               >
                 {" "}
@@ -283,6 +341,19 @@ const RoadDetails = ({ language = "" }) => {
               >
                 {" "}
                 {path.languages.description}
+=======
+                color={!path.pathIsFinished ? "#fff" : "#0A3B7A"}
+              >
+               
+                {path.language.title}:
+              </Typography>
+              <Typography
+                variant="body1"
+                color={!path.pathIsFinished ? "#fff" : "#0A3B7A"}
+              >
+               
+                {path.language.description}
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
               </Typography>
             </Box>
           </Box>

@@ -30,10 +30,18 @@ a {
   background: #bdc4cc;
 }
 
+<<<<<<< HEAD
 .wallet-adapter-button-trigger {
   background-color: #3894D0 !important;
   border-radius: 0.938rem !important;
   font-size: 1.125rem !important;
   padding: 6px inherit !important;
+=======
+.wallet-adapter-dropdown button {
+  background-color: #3894D0 !important;
+  border-radius: 0.938rem !important;
+  font-size: 1.125rem !important;
+  text-transform: none !important;
+>>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
   height: 100% !important;
 }
