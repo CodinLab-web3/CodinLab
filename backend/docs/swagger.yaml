@@ -81,6 +81,13 @@ definitions:
       signatureBase58:
         type: string
     type: object
+  dto.NFTMintDTO:
+    properties:
+      nftID:
+        type: integer
+      publicKeyBase58:
+        type: string
+    type: object
   dto.PathDTO:
     properties:
       difficulty:
@@ -227,6 +234,8 @@ definitions:
       githubProfile:
         type: string
       name:
+        type: string
+      publicKey:
         type: string
       role:
         type: string
@@ -728,10 +737,17 @@ paths:
       tags:
       - Log
   /private/nft/:
-    get:
+    post:
       consumes:
       - application/json
       description: NFT Mint
+      parameters:
+      - description: NFT Mint DTO
+        in: body
+        name: nftMintDTO
+        required: true
+        schema:
+          $ref: '#/definitions/dto.NFTMintDTO'
       produces:
       - application/json
       responses:
@@ -740,6 +756,42 @@ paths:
           schema:
             $ref: '#/definitions/response.BaseResponse'
       summary: NFT Mint
+      tags:
+      - Web3NFT
+  /private/nft/balance/:
+    get:
+      consumes:
+      - application/json
+      description: Add Test Balance
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Add Test Balance
+      tags:
+      - Web3NFT
+  /private/nft/balance/{publicKey}:
+    get:
+      consumes:
+      - application/json
+      description: Get Balance
+      parameters:
+      - description: Public Key
+        in: path
+        name: publicKey
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get Balance
       tags:
       - Web3NFT
   /private/road/{programmingID}:
@@ -1067,6 +1119,27 @@ paths:
       summary: Logout
       tags:
       - Auth
+  /public/nft/metadata/{id}:
+    get:
+      consumes:
+      - application/json
+      description: NFT URI
+      parameters:
+      - description: NFT ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: NFT URI
+      tags:
+      - Web3NFT
   /public/nft/version:
     get:
       consumes:

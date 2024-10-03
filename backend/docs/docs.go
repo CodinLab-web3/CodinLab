@@ -754,7 +754,7 @@ const docTemplate = `{
             }
         },
         "/private/nft/": {
-            "get": {
+            "post": {
                 "description": "NFT Mint",
                 "consumes": [
                     "application/json"
@@ -766,6 +766,72 @@ const docTemplate = `{
                     "Web3NFT"
                 ],
                 "summary": "NFT Mint",
+                "parameters": [
+                    {
+                        "description": "NFT Mint DTO",
+                        "name": "nftMintDTO",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.NFTMintDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/nft/balance/": {
+            "get": {
+                "description": "Add Test Balance",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web3NFT"
+                ],
+                "summary": "Add Test Balance",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/private/nft/balance/{publicKey}": {
+            "get": {
+                "description": "Get Balance",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web3NFT"
+                ],
+                "summary": "Get Balance",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Public Key",
+                        "name": "publicKey",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1283,6 +1349,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/public/nft/metadata/{id}": {
+            "get": {
+                "description": "NFT URI",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web3NFT"
+                ],
+                "summary": "NFT URI",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "NFT ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/public/nft/version": {
             "get": {
                 "description": "Solana Version",
@@ -1491,6 +1589,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "signatureBase58": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.NFTMintDTO": {
+            "type": "object",
+            "properties": {
+                "nftID": {
+                    "type": "integer"
+                },
+                "publicKeyBase58": {
                     "type": "string"
                 }
             }
@@ -1708,6 +1817,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "publicKey": {
                     "type": "string"
                 },
                 "role": {

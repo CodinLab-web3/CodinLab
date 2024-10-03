@@ -11,19 +11,19 @@ type IParserService interface {
 	GetRoadBanner() (content []RoadContent, err error)
 
 	GetNFTs() (nfts []NFTMetadataP, err error)
-	GetNFTByID(id int) (nft *NFTMetadataP, err error)
+	GetNFTByID(idStr string) (nft *NFTMetadataP, err error)
 }
 
+// https://34c7ef24f4v2aejh75xhxy5z6ars4xv47gpsdrei6fiowptk2nqq.arweave.net/3wXyF1wvK6ARJ_9ue-O58CMuXrz5nyHEiPFQ6z5q02E
 type NFTMetadataP struct {
 	ID                   int          `json:"id"`
 	Symbol               string       `json:"symbol"`
 	Name                 string       `json:"name"`
-	Description          string       `json:"description"`
 	Image                string       `json:"image"`
-	ExternalURL          string       `json:"external_url"`
-	AnimationURL         string       `json:"animation_url"`
+	Description          string       `json:"description"`
+	ExternalURL          string       `json:"external_url"` // Bizim NFT Sitemiz gibi Ana Şey
+	URI                  string       `json:"uri"`
 	Attributes           []AttributeP `json:"attributes"`
-	Creator              string       `json:"creator"`
 	SellerFeeBasisPoints int          `json:"seller_fee_basis_points"`
 }
 

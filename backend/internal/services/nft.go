@@ -11,6 +11,7 @@ import (
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
 	"github.com/blocto/solana-go-sdk/client"
 	"github.com/blocto/solana-go-sdk/common"
+	"github.com/blocto/solana-go-sdk/program/associated_token_account"
 	"github.com/blocto/solana-go-sdk/program/metaplex/token_metadata"
 	"github.com/blocto/solana-go-sdk/program/system"
 	"github.com/blocto/solana-go-sdk/program/token"
@@ -52,13 +53,12 @@ func (s *nftService) GetNFTs() (nfts []domains.NFTMetadata, err error) {
 
 		nfts = append(nfts, domains.NewNFTData(
 			n.ID,
+			n.URI,
 			n.Symbol,
 			n.Name,
 			n.Description,
 			n.Image,
 			n.ExternalURL,
-			n.AnimationURL,
-			n.Creator,
 			n.SellerFeeBasisPoints,
 			atts,
 		))
@@ -67,7 +67,7 @@ func (s *nftService) GetNFTs() (nfts []domains.NFTMetadata, err error) {
 	return nfts, nil
 }
 
-func (s *nftService) GetNFTByID(id int) (*domains.NFTMetadata, error) {
+func (s *nftService) GetNFTByID(id string) (*domains.NFTMetadata, error) {
 	nftP, err := s.parserService.GetNFTByID(id)
 	if err != nil {
 		return nil, err
@@ -81,18 +81,187 @@ func (s *nftService) GetNFTByID(id int) (*domains.NFTMetadata, error) {
 
 	nft := domains.NewNFTData(
 		nftP.ID,
+		nftP.URI,
 		nftP.Name,
 		nftP.Symbol,
 		nftP.Description,
 		nftP.Image,
 		nftP.ExternalURL,
-		nftP.AnimationURL,
-		nftP.Creator,
 		nftP.SellerFeeBasisPoints,
 		atts,
 	)
 
 	return &nft, nil
+}
+
+func (s *nftService) GetVersion() (string, error) {
+	// create a RPC client
+	c := client.NewClient(s.net)
+
+	// get the current running Solana version
+	response, err := c.GetVersion(context.TODO())
+	if err != nil {
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while getting solana version", err)
+	}
+
+	return response.SolanaCore, nil
+}
+
+func (s *nftService) GetBalance(ctx context.Context, publicKey string) (uint64, error) {
+	c := client.NewClient(s.net)
+
+	balance, err := c.GetBalance(ctx, publicKey)
+	if err != nil {
+		return 0, service_errors.NewServiceErrorWithMessageAndError(500, "failed to get balance", err)
+	}
+
+	return balance, nil
+}
+
+func (s *nftService) MintNFT(ctx context.Context, userPublicKey string, nftID int) error {
+	nft, err := s.GetNFTByID(fmt.Sprintf("%v", nftID))
+	if err != nil {
+		return err
+	}
+	if nft == nil {
+		return service_errors.NewServiceErrorWithMessage(400, "nft not found")
+	}
+
+	c := client.NewClient(s.net)
+
+	mint := types.NewAccount()
+	// fmt.Printf("NFT: %v\n", mint.PublicKey.ToBase58())
+
+	collection := types.NewAccount()
+	// fmt.Printf("collection: %v\n", collection.PublicKey.ToBase58())
+
+	ata, _, err := common.FindAssociatedTokenAddress(s.feePayer.PublicKey, mint.PublicKey)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to find a valid ata", err)
+	}
+
+	tokenMetadataPubkey, err := token_metadata.GetTokenMetaPubkey(mint.PublicKey)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to find a valid token metadata", err)
+	}
+
+	tokenMasterEditionPubkey, err := token_metadata.GetMasterEdition(mint.PublicKey)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to find a valid master edition", err)
+	}
+
+	mintAccountRent, err := c.GetMinimumBalanceForRentExemption(ctx, token.MintAccountSize)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to get mint account rent", err)
+	}
+
+	recentBlockhashResponse, err := c.GetLatestBlockhash(ctx)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to get recent blockhash", err)
+	}
+
+	maxSupply := uint64(0)
+	tx, err := types.NewTransaction(types.NewTransactionParam{
+		Signers: []types.Account{mint, s.feePayer},
+		Message: types.NewMessage(types.NewMessageParam{
+			FeePayer:        s.feePayer.PublicKey,
+			RecentBlockhash: recentBlockhashResponse.Blockhash,
+			Instructions: []types.Instruction{
+				system.CreateAccount(system.CreateAccountParam{
+					From:     s.feePayer.PublicKey,
+					New:      mint.PublicKey,
+					Owner:    common.TokenProgramID,
+					Lamports: mintAccountRent,
+					Space:    token.MintAccountSize,
+				}),
+				token.InitializeMint2(token.InitializeMint2Param{
+					Decimals:   0,
+					Mint:       mint.PublicKey,
+					MintAuth:   s.feePayer.PublicKey,
+					FreezeAuth: &s.feePayer.PublicKey,
+				}),
+				token_metadata.CreateMetadataAccountV3(token_metadata.CreateMetadataAccountV3Param{
+					Metadata:                tokenMetadataPubkey,
+					Mint:                    mint.PublicKey,
+					MintAuthority:           s.feePayer.PublicKey,
+					Payer:                   s.feePayer.PublicKey,
+					UpdateAuthority:         s.feePayer.PublicKey,
+					UpdateAuthorityIsSigner: true,
+					IsMutable:               true,
+					Data: token_metadata.DataV2{
+						Name:                 nft.GetName(),
+						Symbol:               nft.GetSymbol(),
+						Uri:                  nft.GetURI(),
+						SellerFeeBasisPoints: 100,
+						Creators: &[]token_metadata.Creator{
+							{
+								Address:  s.feePayer.PublicKey,
+								Verified: true,
+								Share:    100,
+							},
+						},
+						Collection: &token_metadata.Collection{
+							Verified: false,
+							Key:      collection.PublicKey,
+						},
+						Uses: &token_metadata.Uses{
+							UseMethod: token_metadata.Burn,
+							Remaining: 10,
+							Total:     10,
+						},
+					},
+				}),
+				associated_token_account.Create(associated_token_account.CreateParam{
+					Funder:                 s.feePayer.PublicKey,
+					Owner:                  s.feePayer.PublicKey,
+					Mint:                   mint.PublicKey,
+					AssociatedTokenAccount: ata,
+				}),
+				token.MintTo(token.MintToParam{
+					Mint:   mint.PublicKey,
+					To:     ata,
+					Auth:   s.feePayer.PublicKey,
+					Amount: 1,
+				}),
+				token_metadata.CreateMasterEditionV3(token_metadata.CreateMasterEditionParam{
+					Edition:         tokenMasterEditionPubkey,
+					Mint:            mint.PublicKey,
+					UpdateAuthority: s.feePayer.PublicKey,
+					MintAuthority:   s.feePayer.PublicKey,
+					Metadata:        tokenMetadataPubkey,
+					Payer:           s.feePayer.PublicKey,
+					MaxSupply:       &maxSupply,
+				}),
+			},
+		}),
+	})
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to create a transaction", err)
+	}
+
+	sig, err := c.SendTransaction(ctx, tx)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to send transaction", err)
+	}
+
+	fmt.Println(sig)
+	return nil
+}
+
+func (s *nftService) RequestTestBalance(ctx context.Context) error {
+	c := client.NewClient(s.net)
+
+	txhash, err := c.RequestAirdrop(
+		ctx,                           // request context
+		s.feePayer.PublicKey.String(), // airdrop isteyen cüzdan adresi
+		1e9,                           // lamport cinsinden 1 SOL
+	)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "error while getting test SOL", err)
+	}
+	fmt.Println("TestBalance TXHash: ", txhash)
+
+	return nil
 }
 
 func (s *nftService) loadAdminAccout() {
@@ -115,124 +284,4 @@ func (s *nftService) loadAdminAccout() {
 	}
 
 	s.feePayer = account
-}
-
-func (s *nftService) GetVersion() (string, error) {
-	// create a RPC client
-	c := client.NewClient(s.net)
-
-	// get the current running Solana version
-	response, err := c.GetVersion(context.TODO())
-	if err != nil {
-		return "", service_errors.NewServiceErrorWithMessageAndError(500, "error while getting solana version", err)
-	}
-
-	return response.SolanaCore, nil
-}
-
-func (s *nftService) MintNFT(userPublicKey string, nftID int) error {
-	// Parser kullandım çünkü json hali lazım.
-	nftData, err := s.parserService.GetNFTByID(nftID)
-	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while getting nft", err)
-	}
-
-	nftJSONData, err := json.Marshal(nftData)
-	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "error while getting json of the nft", err)
-	}
-
-	c := client.NewClient(s.net)
-
-	// create an mint account
-	mint := types.NewAccount()
-	fmt.Println("mint:", mint.PublicKey.ToBase58())
-
-	// get init balance
-	rentExemptionBalance, err := c.GetMinimumBalanceForRentExemption(
-		context.Background(),
-		token.MintAccountSize,
-	)
-	if err != nil {
-		log.Printf("get min balacne for rent exemption, err: %v", err)
-	}
-
-	res, err := c.GetLatestBlockhash(context.Background())
-	if err != nil {
-		log.Printf("get recent block hash error, err: %v\n", err)
-	}
-
-	// Create metadata account
-	metadataAccount := types.NewAccount() // Create a new account for metadata
-	fmt.Println("metadata account:", metadataAccount.PublicKey.ToBase58())
-
-	fmt.Println("admin account: ", s.feePayer.PublicKey)
-
-	// FIXME: NEREDE BELLİ OLUACAK BU NFT NİN KİME GİDECEĞİ
-
-	tx, err := types.NewTransaction(types.NewTransactionParam{
-		Message: types.NewMessage(types.NewMessageParam{
-			FeePayer:        s.feePayer.PublicKey,
-			RecentBlockhash: res.Blockhash,
-			Instructions: []types.Instruction{
-				system.CreateAccount(system.CreateAccountParam{
-					From:     s.feePayer.PublicKey,
-					New:      mint.PublicKey,
-					Owner:    common.TokenProgramID,
-					Lamports: rentExemptionBalance,
-					Space:    token.MintAccountSize,
-				}),
-				token.InitializeMint(token.InitializeMintParam{
-					Decimals:   0, // 0 For NTFs
-					Mint:       mint.PublicKey,
-					MintAuth:   s.feePayer.PublicKey, // common.PublicKeyFromString(userPublicKey)
-					FreezeAuth: nil,
-				}),
-				// Create Metadata Account
-				system.CreateAccount(system.CreateAccountParam{
-					From:     s.feePayer.PublicKey,
-					New:      metadataAccount.PublicKey,
-					Owner:    common.MetaplexTokenMetaProgramID,
-					Lamports: rentExemptionBalance,
-					Space:    uint64(len(nftJSONData)),
-				}),
-
-				// FIXME: FIX LAN BURAYI
-				token_metadata.CreateMetadataAccount(token_metadata.CreateMetadataAccountParam{
-					Metadata:                metadataAccount.PublicKey,
-					Mint:                    mint.PublicKey,
-					MintAuthority:           s.feePayer.PublicKey,
-					Payer:                   s.feePayer.PublicKey,
-					UpdateAuthority:         s.feePayer.PublicKey,
-					UpdateAuthorityIsSigner: true, // Eğer güncelleme yetkisi imzalı olacaksa true
-					IsMutable:               true, // Metadata'nın güncellenebilir olup olmadığını belirtin
-					MintData: token_metadata.Data{
-						Name:                 nftData.Name, // NFT'nin ismi
-						Uri:                  nftData.ExternalURL,
-						Symbol:               nftData.Symbol,                       // NFT'nin sembolü, burayı düzeltin
-						SellerFeeBasisPoints: uint16(nftData.SellerFeeBasisPoints), // Satış komisyonu
-						Creators: &[]token_metadata.Creator{
-							{
-								Address:  s.feePayer.PublicKey, // Yaratıcının adresi
-								Verified: true,                 // Yaratıcının doğrulanıp doğrulanmadığı
-								Share:    100,                  // Yaratıcının payı (örn. %100)
-							},
-						},
-					},
-				}),
-			},
-		}),
-		Signers: []types.Account{s.feePayer, mint},
-	})
-	if err != nil {
-		log.Printf("generate tx error, err: %v\n", err)
-	}
-
-	txhash, err := c.SendTransaction(context.Background(), tx)
-	if err != nil {
-		log.Printf("send tx error, err: %v\n", err)
-	}
-	log.Println("txhash:", txhash)
-
-	return nil
 }

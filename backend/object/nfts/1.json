@@ -1,17 +1,28 @@
 {
-    "name": "My Unique NFT",
-    "symbol": "NFT",
-    "description": "This is a description of my NFT.",
-    "image": "https://example.com/image.png",
-    "attributes": [
-      {
-        "trait_type": "Background",
-        "value": "Blue"
-      },
-      {
-        "trait_type": "Eyes",
-        "value": "Blue"
-      }
-    ]
+  "id": 1,
+  "symbol": "CPPNFT",
+  "name": "C++ Mastery Badge",
+  "image": "https://yavuzlar.org/logo/logo.png",
+  "external_url": "",
+  "uri": "http://localhost/nft/metadata/1",
+  "description": "An exclusive NFT awarded to those who have completed the C++ programming course. This badge symbolizes mastery in C++ and is a testament to your coding skills.",
+  "attributes": [
+    {
+      "trait_type": "Skill Level",
+      "value": "Master"
+    },
+    {
+      "trait_type": "Course Completed",
+      "value": "C++ Programming"
+    },
+    {
+      "trait_type": "Date Earned",
+      "value": "2024-10-03"
+    },
+    {
+      "trait_type": "Reward",
+      "value": "Exclusive Access to Advanced Workshops"
+    }
+  ],
+  "seller_fee_basis_points": 500
 }
-  

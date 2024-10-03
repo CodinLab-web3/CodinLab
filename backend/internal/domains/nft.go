@@ -1,22 +1,25 @@
 package domains
 
+import "context"
+
 type INFTService interface {
 	GetNFTs() (nfts []NFTMetadata, err error)
-	GetNFTByID(id int) (*NFTMetadata, error)
-	MintNFT(userPublicKey string, nftID int) error
+	GetNFTByID(id string) (*NFTMetadata, error)
+	MintNFT(ctx context.Context, userPublicKey string, nftID int) error
 	GetVersion() (string, error)
+	GetBalance(ctx context.Context, publicKey string) (uint64, error)
+	RequestTestBalance(ctx context.Context) error
 }
 
 type NFTMetadata struct {
 	id                   int
-	name                 string
 	symbol               string
-	description          string
+	name                 string
 	image                string
+	uri                  string
+	description          string
 	externalURL          string
-	animationURL         string
 	attributes           []Attribute
-	creator              string
 	sellerFeeBasisPoints int
 }
 
@@ -28,20 +31,19 @@ type Attribute struct {
 
 func NewNFTData(
 	id int,
-	name, symbol, description, image, externalURL, animationURL, creator string,
+	uri, name, symbol, description, image, externalURL string,
 	sellerFeeBasisPoints int,
 	attributes []Attribute,
 ) NFTMetadata {
 	return NFTMetadata{
+		uri:                  uri,
 		id:                   id,
 		name:                 name,
 		symbol:               symbol,
 		description:          description,
 		image:                image,
 		externalURL:          externalURL,
-		animationURL:         animationURL,
 		attributes:           attributes,
-		creator:              creator,
 		sellerFeeBasisPoints: sellerFeeBasisPoints,
 	}
 }
@@ -60,6 +62,14 @@ func (n *NFTMetadata) GetID() int {
 
 func (n *NFTMetadata) SetID(id int) {
 	n.id = id
+}
+
+func (n *NFTMetadata) GetURI() string {
+	return n.uri
+}
+
+func (n *NFTMetadata) SetURI(uri string) {
+	n.uri = uri
 }
 
 func (n *NFTMetadata) GetSymbol() string {
@@ -102,28 +112,12 @@ func (n *NFTMetadata) SetExternalURL(externalURL string) {
 	n.externalURL = externalURL
 }
 
-func (n *NFTMetadata) GetAnimationURL() string {
-	return n.animationURL
-}
-
-func (n *NFTMetadata) SetAnimationURL(animationURL string) {
-	n.animationURL = animationURL
-}
-
 func (n *NFTMetadata) GetAttributes() []Attribute {
 	return n.attributes
 }
 
 func (n *NFTMetadata) SetAttributes(attributes []Attribute) {
 	n.attributes = attributes
-}
-
-func (n *NFTMetadata) GetCreator() string {
-	return n.creator
-}
-
-func (n *NFTMetadata) SetCreator(creator string) {
-	n.creator = creator
 }
 
 func (n *NFTMetadata) GetSellerFeeBasisPoints() int {
