@@ -25,6 +25,7 @@ import themeConfig from "src/configs/themeConfig";
 import { useAuth } from "src/hooks/useAuth";
 import LanguageSelector from "src/layout/components/navigation/item/LanguageSelector";
 import { useRouter } from "next/router";
+import WalletConnectionButton from "src/components/Wallet/WalletConnectionButton";
 
 const { default: BlankLayout } = require("src/layout/BlankLayout");
 
@@ -117,9 +118,14 @@ const Login = () => {
       {md_down ? (
         ""
       ) : (
-        <Button sx={{ top: 10, right: 5, position: "absolute" }}>
-          <LanguageSelector />
-        </Button>
+        <Box sx={{ display: "flex", top: 10, right: 5, position: "absolute", gap: "1rem", alignItems: "center" }}>
+
+          <WalletConnectionButton />
+
+          <Button>
+            <LanguageSelector />
+          </Button>
+        </Box>
       )}
       <Box
         sx={{
@@ -152,9 +158,13 @@ const Login = () => {
               spacing={4}
             >
               {md_down ? (
-                <Button sx={{ top: 10, right: 5, position: "absolute" }}>
-                  <LanguageSelector />
-                </Button>
+                <Box sx={{ top: 10, right: 5, position: "absolute", gap: "1rem" }}>
+                  <WalletConnectionButton />
+
+                  <Button>
+                    <LanguageSelector />
+                  </Button>
+                </Box>
               ) : (
                 ""
               )}

@@ -16,7 +16,13 @@ type LoginDTO struct {
 }
 
 type LoginResponseDTO struct {
-	Role string `json:"role"`
+	Username      string `json:"username"`
+	Name          string `json:"name"`
+	Surname       string `json:"surname"`
+	Role          string `json:"role"`
+	GithubProfile string `json:"githubProfile"`
+	BestLanguage  string `json:"bestLanguage"`
+	PublicKey     string `json:"publicKey"`
 }
 
 type RegisterDTO struct {
@@ -43,6 +49,7 @@ type UserDTO struct {
 	Role          string `json:"role"`
 	GithubProfile string `json:"githubProfile"`
 	BestLanguage  string `json:"bestLanguage"`
+	PublicKey     string `json:"publicKey"`
 }
 
 func (m *UserDTOManager) ToUserDTO(user *domains.User, bestProgrammingLanguage string) UserDTO {
@@ -51,14 +58,21 @@ func (m *UserDTOManager) ToUserDTO(user *domains.User, bestProgrammingLanguage s
 		Name:          user.Name(),
 		Surname:       user.Surname(),
 		Role:          user.Role(),
+		PublicKey:     user.PublicKey(),
 		GithubProfile: user.GithubProfile(),
 		BestLanguage:  bestProgrammingLanguage,
 	}
 }
 
-func (m *UserDTOManager) ToLoginResponseDTO(user *domains.User) LoginResponseDTO {
+func (m *UserDTOManager) ToLoginResponseDTO(user *domains.User, bestProgrammingLanguage string) LoginResponseDTO {
 	return LoginResponseDTO{
-		Role: user.Role(),
+		Username:      user.Username(),
+		Name:          user.Name(),
+		Surname:       user.Surname(),
+		Role:          user.Role(),
+		PublicKey:     user.PublicKey(),
+		GithubProfile: user.GithubProfile(),
+		BestLanguage:  bestProgrammingLanguage,
 	}
 }
 
