@@ -29,7 +29,6 @@ import WindowWrapper from "src/components/window-wrapper";
 import AclGuard from "src/layout/auth/AclGuard";
 import { appWithTranslation } from "next-i18next";
 import "src/configs/i18n";
-import { Wallet } from "src/components/Wallet";
 
 // ** Pace Loader
 if (themeConfig.routingLoader) {
@@ -85,28 +84,26 @@ const App = (props) => {
         ></link>
       </Head>
 
-      <Wallet>
-        <AuthProvider>
-          <NavProvider>
-            <ThemeComponent>
-              <WindowWrapper>
-                <Guard authGuard={authGuard} guestGuard={guestGuard}>
-                  <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard}>
-                    {getLayout(<Component {...pageProps} />)}
-                  </AclGuard>
-                </Guard>
-              </WindowWrapper>
+      <AuthProvider>
+        <NavProvider>
+          <ThemeComponent>
+            <WindowWrapper>
+              <Guard authGuard={authGuard} guestGuard={guestGuard}>
+                <AclGuard aclAbilities={aclAbilities} guestGuard={guestGuard}>
+                  {getLayout(<Component {...pageProps} />)}
+                </AclGuard>
+              </Guard>
+            </WindowWrapper>
 
-              <ReactHotToast>
-                <Toaster
-                  position={themeConfig.toastPosition}
-                  toastOptions={{ className: "react-hot-toast" }}
-                />
-              </ReactHotToast>
-            </ThemeComponent>
-          </NavProvider>
-        </AuthProvider>
-      </Wallet>
+            <ReactHotToast>
+              <Toaster
+                position={themeConfig.toastPosition}
+                toastOptions={{ className: "react-hot-toast" }}
+              />
+            </ReactHotToast>
+          </ThemeComponent>
+        </NavProvider>
+      </AuthProvider>
     </Provider>
   );
 };

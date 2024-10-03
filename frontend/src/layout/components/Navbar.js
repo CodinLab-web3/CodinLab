@@ -17,9 +17,12 @@ import { useNav } from "src/hooks/useNav";
 import Logo from "../../assets/logo/codinlab-logo-light.png";
 import Image from "next/image";
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import WalletConnectionButton from "src/components/Wallet/WalletConnectionButton";
 >>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
+=======
+>>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
 
 function ResponsiveAppBar() {
   const { logout } = useAuth();
@@ -144,6 +147,7 @@ function ResponsiveAppBar() {
               <NavItem key={index} {...item} />
             ))}
 <<<<<<< HEAD
+<<<<<<< HEAD
             <LanguageSelector />
 =======
 
@@ -152,6 +156,9 @@ function ResponsiveAppBar() {
             <WalletConnectionButton />
 
 >>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
+=======
+            <LanguageSelector />
+>>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
             <IconButton
               onClick={handleLogout}
               sx={{

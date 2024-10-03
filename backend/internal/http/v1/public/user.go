@@ -50,6 +50,7 @@ func (h *PublicHandler) Login(c *fiber.Ctx) error {
 		return err
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	loginResponse := h.dtoManager.UserDTOManager.ToLoginResponseDTO(userdata)
 =======
 
@@ -59,6 +60,9 @@ func (h *PublicHandler) Login(c *fiber.Ctx) error {
 	}
 	loginResponse := h.dtoManager.UserDTOManager.ToLoginResponseDTO(userdata, bestProgrammingLanguage)
 >>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
+=======
+	loginResponse := h.dtoManager.UserDTOManager.ToLoginResponseDTO(userdata)
+>>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
 
 	return response.Response(200, "Login successful", loginResponse)
 }
@@ -95,11 +99,7 @@ func (h *PublicHandler) LoginWeb3(c *fiber.Ctx) error {
 	if err := sess.Save(); err != nil {
 		return err
 	}
-	bestProgrammingLanguage, err := h.services.UserService.BestProgrammingLanguages(c.Context(), userdata.ID().String())
-	if err != nil {
-		return err
-	}
-	loginResponse := h.dtoManager.UserDTOManager.ToLoginResponseDTO(userdata, bestProgrammingLanguage)
+	loginResponse := h.dtoManager.UserDTOManager.ToLoginResponseDTO(userdata)
 
 	return response.Response(200, "LoginWeb3 successful", loginResponse)
 }

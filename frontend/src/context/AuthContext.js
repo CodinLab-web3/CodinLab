@@ -6,12 +6,6 @@ import { showToast } from "src/utils/showToast";
 import { t } from "i18next";
 // ** Spinner Import
 import Spinner from "src/components/spinner";
-// Wallet
-
-import { useWalletModal } from "@solana/wallet-adapter-react-ui";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { SigninMessage } from "src/components/Wallet/SignInMessage";
-import { binary_to_base58 } from "base58-js";
 
 const defaultProvider = {
   user: null,
@@ -33,12 +27,6 @@ const AuthProvider = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(
     defaultProvider.isInitialized
   );
-
-  // ** Wallet
-  const wallet = useWallet();
-  const { disconnect } = useWallet();
-  const walletModal = useWalletModal();
-
   const ws = useRef(null);
 
   const router = useRouter();
@@ -57,6 +45,20 @@ const AuthProvider = ({ children }) => {
 
     ws.current.onmessage = (e) => {
       console.log("Message from server:", e.data);
+<<<<<<< HEAD
+=======
+
+
+      // this part is for get container id from websocket but not used in this project
+      // const data = JSON.parse(e.data); // 
+      // if (data.Type === "container") {
+      //   const containerId = data?.Data?.id;
+  
+      //   if (containerId) {
+      //     localStorage.setItem('containerId', containerId);
+      //   }
+      // }
+>>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
     };
 
     ws.current.onclose = () => {
@@ -78,13 +80,11 @@ const AuthProvider = ({ children }) => {
   };
 
   const deleteStorage = () => {
-    if (wallet.connected) disconnect();
     setUser(null);
     setLoading(false);
     closeWebSocket();
     const firstPath = router.pathname.split("/")[1];
-    if (firstPath != "login")
-      if (firstPath != "register") router.replace("/login");
+    if (firstPath !== "login") router.replace("/login");
   };
 
   const handleLogout = async () => {
@@ -94,10 +94,6 @@ const AuthProvider = ({ children }) => {
         method: "POST",
       });
       if (response.status === 200) {
-        if (user) {
-          showToast("dismiss");
-          showToast("success", "Logged out successfully");
-        }
         deleteStorage();
       } else {
         showToast("dismiss");
@@ -105,14 +101,13 @@ const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       showToast("dismiss");
-      showToast("error", t(error?.response?.data?.message));
+      showToast("error", t(error.response.data.message));
     }
   };
 
   const initAuth = () => {
     setLoading(true);
     setIsInitialized(false);
-    if (router.pathname !== "/register") localStorage.removeItem("publicKey")
 
     axios({
       url: authConfig.account,
@@ -130,7 +125,7 @@ const AuthProvider = ({ children }) => {
               router.push("/").then(() => router.reload());
             } else {
               setLoading(false);
-              webSocket();
+              webSocket(); 
             }
           } else {
             setLoading(false);
@@ -138,34 +133,29 @@ const AuthProvider = ({ children }) => {
           }
         } else {
           setLoading(false);
-          // showToast("dismiss");
-          // showToast("error", response.data.message);
+          showToast("dismiss");
+          showToast("error", response.data.message);
           handleLogout();
         }
       })
       .catch((error) => {
         setLoading(false);
-        // showToast("dismiss");
-        // showToast("error", t(error?.response?.data?.message ?? ""));
+        showToast("dismiss");
+        showToast("error", t(error?.response?.data?.message ?? ""));
         handleLogout();
       });
   };
 
   const handleRegister = async (formData) => {
-    let pKey = localStorage.getItem("publicKey")
-
-    let data = pKey ? { ...formData, publicKeyBase58: pKey } : formData;
-
     try {
       const response = await axios({
-        url: pKey ? authConfig.walletRegister : authConfig.register,
+        url: authConfig.register,
         method: "POST",
-        data: data,
+        data: formData,
       });
       if (response.status === 200) {
         showToast("dismiss");
         showToast("success", "Account created successfully");
-        localStorage.removeItem("publicKey");
         router.push("/login");
       } else {
         showToast("dismiss");
@@ -174,7 +164,7 @@ const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       showToast("dismiss");
-      showToast("error", t(error?.response?.data?.message));
+      showToast("error", t(error.response.data.message));
       handleLogout();
     }
   };
@@ -191,101 +181,20 @@ const AuthProvider = ({ children }) => {
         const user = response?.data?.data;
         setUser(user);
         router.push("/home");
-        webSocket();
+        webSocket(); 
       } else {
         showToast("dismiss");
         showToast("error", response.data.message);
       }
     } catch (error) {
       showToast("dismiss");
-      showToast("error", t(error?.response?.data?.message));
+      showToast("error", t(error.response.data.message));
     }
   };
-
-  const handleWalletLogin = async (data) => {
-    try {
-      const response = await axios({
-        url: authConfig.walletLogin,
-        method: "POST",
-        data: data,
-      });
-
-      if (response.status === 200) {
-        const user = response?.data?.data;
-        setUser(user);
-
-        showToast("dismiss");
-        showToast("success", "Logged in successfully");
-        router.push("/home");
-        webSocket();
-      } else {
-        showToast("dismiss");
-        showToast("error", response.data.message);
-      }
-    } catch (error) {
-      showToast("dismiss");
-      showToast("error", t(error?.response?.data?.message));
-
-      if (error?.response?.data?.message == "public key do not match") {
-        localStorage.setItem("publicKey", wallet.publicKey.toBase58());
-        router.push("/register");
-      }
-    }
-  };
-
-  const handleSignIn = async () => {
-    try {
-      // if wallet is not connected then show wallet modal
-      if (!wallet.connected) walletModal.setVisible(true)
-
-      // if wallet public key or signMessage is not available then return
-      if (!wallet.publicKey || !wallet.signMessage) return;
-
-      // if user already logged in do not then return 
-      if (user && user?.publicKey) return;
-
-      // create a new SigninMessage object
-      const message = new SigninMessage({
-        domain: window.location.host,
-        publicKey: wallet.publicKey.toBase58(),
-        statement: `Sign in to ${window.location.host}`,
-      });
-
-      const data = new TextEncoder().encode(message.prepare()); // encode the message
-      const signature = await wallet.signMessage(data); // sign the message
-      const serializedSignature = binary_to_base58(signature); // convert the signature to base58
-
-      // call the handleWalletLogin function with the message, public key and signature to communicate with the backend
-      handleWalletLogin({
-        message: message.statement, // message statement in plain text
-        publicKeyBase58: wallet.publicKey, // public key in base58
-        signatureBase58: serializedSignature, // signature in base58
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const openSignIn = () => {
-    const pKey = localStorage.getItem("publicKey") || null;
-
-    if (wallet.connected) { // if wallet is connected
-      if (!pKey) handleSignIn(); // if public key is not available in local storage then call handleSignIn function
-      else if (router.pathname !== "/register") router.push("/register") // if public key is available in local storage then redirect to register page
-    }
-  }
 
   useEffect(() => {
-    if (!wallet.connected && user?.publicKey) {
-      handleLogout()
-      return
-    }
-
-    if (wallet.connected && !user?.publicKey) {
-      openSignIn()
-    } else initAuth();
-  }, [wallet]);
-  // ** Wallet
+    initAuth();
+  }, []);
 
   const values = {
     user,

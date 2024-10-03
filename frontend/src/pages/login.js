@@ -26,10 +26,13 @@ import { useAuth } from "src/hooks/useAuth";
 import LanguageSelector from "src/layout/components/navigation/item/LanguageSelector";
 import { useRouter } from "next/router";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 =======
 import WalletConnectionButton from "src/components/Wallet/WalletConnectionButton";
 >>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
+=======
+>>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
 
 const { default: BlankLayout } = require("src/layout/BlankLayout");
 
@@ -123,6 +126,7 @@ const Login = () => {
         ""
       ) : (
 <<<<<<< HEAD
+<<<<<<< HEAD
         <>
           <Box sx={{ top: 10, right: 5, position: "absolute", display: "flex", gap: "1rem" }}>
             <WalletMultiButton />
@@ -142,6 +146,11 @@ const Login = () => {
           </Button>
         </Box>
 >>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
+=======
+        <Button sx={{ top: 10, right: 5, position: "absolute" }}>
+          <LanguageSelector />
+        </Button>
+>>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
       )}
       <Box
         sx={{
@@ -175,6 +184,7 @@ const Login = () => {
             >
               {md_down ? (
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <Button sx={{ top: 10, right: 5, position: "absolute" }}>
                   <LanguageSelector />
                 </Button>
@@ -187,6 +197,11 @@ const Login = () => {
                   </Button>
                 </Box>
 >>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
+=======
+                <Button sx={{ top: 10, right: 5, position: "absolute" }}>
+                  <LanguageSelector />
+                </Button>
+>>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
               ) : (
                 ""
               )}

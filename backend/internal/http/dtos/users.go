@@ -17,6 +17,7 @@ type LoginDTO struct {
 
 type LoginResponseDTO struct {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	Role string `json:"role"`
 =======
 	Username      string `json:"username"`
@@ -27,6 +28,9 @@ type LoginResponseDTO struct {
 	BestLanguage  string `json:"bestLanguage"`
 	PublicKey     string `json:"publicKey"`
 >>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
+=======
+	Role string `json:"role"`
+>>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
 }
 
 type RegisterDTO struct {
@@ -54,9 +58,12 @@ type UserDTO struct {
 	GithubProfile string `json:"githubProfile"`
 	BestLanguage  string `json:"bestLanguage"`
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	PublicKey     string `json:"publicKey"`
 >>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
+=======
+>>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
 }
 
 func (m *UserDTOManager) ToUserDTO(user *domains.User, bestProgrammingLanguage string) UserDTO {
@@ -66,14 +73,18 @@ func (m *UserDTOManager) ToUserDTO(user *domains.User, bestProgrammingLanguage s
 		Surname:       user.Surname(),
 		Role:          user.Role(),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 		PublicKey:     user.PublicKey(),
 >>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
+=======
+>>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
 		GithubProfile: user.GithubProfile(),
 		BestLanguage:  bestProgrammingLanguage,
 	}
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 func (m *UserDTOManager) ToLoginResponseDTO(user *domains.User) LoginResponseDTO {
 	return LoginResponseDTO{
@@ -89,6 +100,11 @@ func (m *UserDTOManager) ToLoginResponseDTO(user *domains.User, bestProgrammingL
 		GithubProfile: user.GithubProfile(),
 		BestLanguage:  bestProgrammingLanguage,
 >>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
+=======
+func (m *UserDTOManager) ToLoginResponseDTO(user *domains.User) LoginResponseDTO {
+	return LoginResponseDTO{
+		Role: user.Role(),
+>>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
 	}
 }
 
