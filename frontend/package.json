@@ -25,14 +25,11 @@
     "@solana/wallet-adapter-wallets": "^0.19.32",
     "@solana/web3.js": "^1.95.3",
     "@svgr/webpack": "^8.1.0",
-    "@web3-react/core": "^8.2.3",
     "accept-language": "^3.0.18",
     "apexcharts": "^3.52.0",
     "autoprefixer": "10.4.14",
     "axios": "^1.6.7",
     "base58-js": "^2.0.0",
-    "base58-universal": "^2.0.0",
-    "bs58": "^6.0.0",
     "clsx": "^2.0.0",
     "eslint-config-next": "^14.0.4",
     "i18next": "^23.7.7",
@@ -54,7 +51,6 @@
     "react-multi-carousel": "^2.8.4",
     "react-redux": "^9.1.0",
     "recharts": "^2.12.7",
-    "tweetnacl": "^1.0.3",
     "yup": "^1.4.0"
   },
   "devDependencies": {

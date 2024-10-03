@@ -1,5 +1,5 @@
-import { base58_to_binary } from 'base58-js';
-import nacl from "tweetnacl";
+// import { base58_to_binary } from 'base58-js';
+// import nacl from "tweetnacl";
 type SignMessage = {
     domain: string;
     publicKey: string;
@@ -22,12 +22,12 @@ export class SigninMessage {
         return this.statement;
     }
 
-    async validate(signature: string) {
-        const msg = this.prepare();
-        const signatureUint8 = base58_to_binary(signature);
-        const msgUint8 = new TextEncoder().encode(msg);
-        const pubKeyUint8 = base58_to_binary(this.publicKey);
+    // async validate(signature: string) {
+    //     const msg = this.prepare();
+    //     const signatureUint8 = base58_to_binary(signature);
+    //     const msgUint8 = new TextEncoder().encode(msg);
+    //     const pubKeyUint8 = base58_to_binary(this.publicKey);
 
-        return nacl.sign.detached.verify(msgUint8, signatureUint8, pubKeyUint8);
-    }
+    //     return nacl.sign.detached.verify(msgUint8, signatureUint8, pubKeyUint8);
+    // }
 }
