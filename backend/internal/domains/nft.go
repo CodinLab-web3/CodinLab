@@ -5,10 +5,11 @@ import "context"
 type INFTService interface {
 	GetNFTs() (nfts []NFTMetadata, err error)
 	GetNFTByID(id string) (*NFTMetadata, error)
-	MintNFT(ctx context.Context, userPublicKey string, nftID int) error
+	MintNFT(ctx context.Context, nftID int) (string, error)
 	GetVersion() (string, error)
 	GetBalance(ctx context.Context, publicKey string) (uint64, error)
 	RequestTestBalance(ctx context.Context) error
+	TransferNFT(ctx context.Context, recipientPublicKey string, mintPublicKey string) error
 }
 
 type NFTMetadata struct {

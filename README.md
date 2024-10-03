@@ -11,4 +11,6 @@ solana address
 solana airdrop 1
 solana balance
 
+!! solana config get
+
 ADMIN NFT PUBLIC KEY: Evbk6coHRPWQFaPhgRdmpZ4uC5n19PLnoSp5pw9SStbs

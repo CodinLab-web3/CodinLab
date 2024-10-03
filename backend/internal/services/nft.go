@@ -118,18 +118,21 @@ func (s *nftService) GetBalance(ctx context.Context, publicKey string) (uint64, 
 	return balance, nil
 }
 
-func (s *nftService) MintNFT(ctx context.Context, userPublicKey string, nftID int) error {
+func (s *nftService) MintNFT(ctx context.Context, nftID int) (string, error) {
+	var mintPublicKeyStr string
+
 	nft, err := s.GetNFTByID(fmt.Sprintf("%v", nftID))
 	if err != nil {
-		return err
+		return "", err
 	}
 	if nft == nil {
-		return service_errors.NewServiceErrorWithMessage(400, "nft not found")
+		return "", service_errors.NewServiceErrorWithMessage(400, "nft not found")
 	}
 
 	c := client.NewClient(s.net)
 
 	mint := types.NewAccount()
+	mintPublicKeyStr = mint.PublicKey.String()
 	// fmt.Printf("NFT: %v\n", mint.PublicKey.ToBase58())
 
 	collection := types.NewAccount()
@@ -137,27 +140,27 @@ func (s *nftService) MintNFT(ctx context.Context, userPublicKey string, nftID in
 
 	ata, _, err := common.FindAssociatedTokenAddress(s.feePayer.PublicKey, mint.PublicKey)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to find a valid ata", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, "failed to find a valid ata", err)
 	}
 
 	tokenMetadataPubkey, err := token_metadata.GetTokenMetaPubkey(mint.PublicKey)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to find a valid token metadata", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, "failed to find a valid token metadata", err)
 	}
 
 	tokenMasterEditionPubkey, err := token_metadata.GetMasterEdition(mint.PublicKey)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to find a valid master edition", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, "failed to find a valid master edition", err)
 	}
 
 	mintAccountRent, err := c.GetMinimumBalanceForRentExemption(ctx, token.MintAccountSize)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to get mint account rent", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, "failed to get mint account rent", err)
 	}
 
 	recentBlockhashResponse, err := c.GetLatestBlockhash(ctx)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to get recent blockhash", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, "failed to get recent blockhash", err)
 	}
 
 	maxSupply := uint64(0)
@@ -236,15 +239,68 @@ func (s *nftService) MintNFT(ctx context.Context, userPublicKey string, nftID in
 		}),
 	})
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to create a transaction", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, "failed to create a transaction", err)
 	}
 
 	sig, err := c.SendTransaction(ctx, tx)
 	if err != nil {
-		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to send transaction", err)
+		return "", service_errors.NewServiceErrorWithMessageAndError(500, "failed to send transaction", err)
 	}
 
 	fmt.Println(sig)
+	return mintPublicKeyStr, nil
+}
+
+func (s *nftService) TransferNFT(ctx context.Context, recipientPublicKey string, mintPublicKey string) error {
+	nftPublicKey := common.PublicKeyFromString(mintPublicKey)
+	reciverPublicKey := common.PublicKeyFromString(recipientPublicKey)
+
+	// Gönderenin Associated Token Account'ını bul
+	senderATA, _, err := common.FindAssociatedTokenAddress(s.feePayer.PublicKey, nftPublicKey)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to find sender's associated token address", err)
+	}
+
+	// Alıcının Associated Token Account'ını bul
+	recipientATA, _, err := common.FindAssociatedTokenAddress(reciverPublicKey, nftPublicKey)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to find recipient's associated token address", err)
+	}
+
+	// Son blok hash'ini al
+	c := client.NewClient(s.net)
+	recentBlockhashResponse, err := c.GetLatestBlockhash(ctx)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to get recent blockhash", err)
+	}
+
+	// Transfer işlemi için yeni bir transaction oluştur
+	tx, err := types.NewTransaction(types.NewTransactionParam{
+		Signers: []types.Account{s.feePayer}, // Burada feePayer imza atacak
+		Message: types.NewMessage(types.NewMessageParam{
+			FeePayer:        s.feePayer.PublicKey,
+			RecentBlockhash: recentBlockhashResponse.Blockhash,
+			Instructions: []types.Instruction{
+				token.Transfer(token.TransferParam{
+					From:   senderATA,
+					To:     recipientATA,
+					Auth:   s.feePayer.PublicKey,
+					Amount: 1, // NFT'nin transferi için 1 birim gönderiyoruz
+				}),
+			},
+		}),
+	})
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to create a transaction", err)
+	}
+
+	// Transaction'ı gönder
+	sig, err := c.SendTransaction(ctx, tx)
+	if err != nil {
+		return service_errors.NewServiceErrorWithMessageAndError(500, "failed to send transaction, selam", err)
+	}
+
+	fmt.Println("Transfer signature:", sig)
 	return nil
 }
 

@@ -32,7 +32,13 @@ func (h *PrivateHandler) MintNft(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := h.services.NFTService.MintNFT(c.Context(), nftMintDTO.PublicKey, nftMintDTO.NFTID); err != nil {
+	nftPublicKey, err := h.services.NFTService.MintNFT(c.Context(), nftMintDTO.NFTID)
+	if err != nil {
+		return err
+	}
+
+	// FIXME: Normalde bu publicKey session'dan çekilicek
+	if err := h.services.NFTService.TransferNFT(c.Context(), nftPublicKey, nftPublicKey); err != nil {
 		return err
 	}
 
