@@ -29,22 +29,11 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: #bdc4cc;
 }
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-.wallet-adapter-button-trigger {
-  background-color: #3894D0 !important;
-  border-radius: 0.938rem !important;
-  font-size: 1.125rem !important;
-  padding: 6px inherit !important;
-=======
 .wallet-adapter-dropdown button {
   background-color: #3894D0 !important;
   border-radius: 0.938rem !important;
   font-size: 1.125rem !important;
   text-transform: none !important;
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
   height: 100% !important;
 }
-=======
->>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)

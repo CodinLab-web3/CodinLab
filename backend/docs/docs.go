@@ -753,8 +753,6 @@ const docTemplate = `{
                 }
             }
         },
-<<<<<<< HEAD
-=======
         "/private/nft/": {
             "get": {
                 "description": "NFT Mint",
@@ -778,7 +776,6 @@ const docTemplate = `{
                 }
             }
         },
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         "/private/road/answer/{programmingID}/{pathID}": {
             "post": {
                 "description": "This is for answering quests.",
@@ -802,15 +799,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-<<<<<<< HEAD
-=======
                         "description": "Language",
                         "name": "Language",
                         "in": "header"
                     },
                     {
                         "type": "string",
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
                         "description": "Path ID",
                         "name": "pathID",
                         "in": "path",
@@ -966,15 +960,12 @@ const docTemplate = `{
                         "name": "programmingID",
                         "in": "path",
                         "required": true
-<<<<<<< HEAD
-=======
                     },
                     {
                         "type": "string",
                         "description": "Language",
                         "name": "Language",
                         "in": "header"
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
                     }
                 ],
                 "responses": {
@@ -1235,8 +1226,6 @@ const docTemplate = `{
                 }
             }
         },
-<<<<<<< HEAD
-=======
         "/public/loginWeb3": {
             "post": {
                 "description": "Login",
@@ -1271,7 +1260,6 @@ const docTemplate = `{
                 }
             }
         },
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         "/public/logout": {
             "post": {
                 "description": "Logout",
@@ -1295,8 +1283,6 @@ const docTemplate = `{
                 }
             }
         },
-<<<<<<< HEAD
-=======
         "/public/nft/version": {
             "get": {
                 "description": "Solana Version",
@@ -1320,7 +1306,6 @@ const docTemplate = `{
                 }
             }
         },
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         "/public/register": {
             "post": {
                 "description": "Register",
@@ -1354,8 +1339,6 @@ const docTemplate = `{
                     }
                 }
             }
-<<<<<<< HEAD
-=======
         },
         "/public/registerWeb3": {
             "post": {
@@ -1390,7 +1373,6 @@ const docTemplate = `{
                     }
                 }
             }
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         }
     },
     "definitions": {
@@ -1499,8 +1481,6 @@ const docTemplate = `{
                 }
             }
         },
-<<<<<<< HEAD
-=======
         "dto.LoginWeb3DTO": {
             "type": "object",
             "properties": {
@@ -1515,7 +1495,6 @@ const docTemplate = `{
                 }
             }
         },
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
         "dto.PathDTO": {
             "type": "object",
             "properties": {
@@ -1572,11 +1551,6 @@ const docTemplate = `{
                 }
             }
         },
-<<<<<<< HEAD
-        "dto.RoadDTO": {
-            "type": "object",
-            "properties": {
-=======
         "dto.RegisterWeb3DTO": {
             "type": "object",
             "required": [
@@ -1616,7 +1590,6 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
                 "iconPath": {
                     "type": "string"
                 },
@@ -1637,12 +1610,9 @@ const docTemplate = `{
                 },
                 "roadIsStarted": {
                     "type": "boolean"
-<<<<<<< HEAD
-=======
                 },
                 "title": {
                     "type": "string"
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
                 }
             }
         },

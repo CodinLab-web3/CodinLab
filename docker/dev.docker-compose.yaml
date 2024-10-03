@@ -2,11 +2,7 @@ version: '3.3'
 
 services:
   api:
-<<<<<<< HEAD
-    container_name: scodinlab-api
-=======
     container_name: codinlab-api
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
     build:
       context: ../backend/.
       dockerfile: ../docker/backend/dev.Dockerfile
@@ -16,17 +12,10 @@ services:
       - ../backend:/app
       - /var/run/docker.sock:/var/run/docker.sock  # Docker.sock ekleniyor
     networks:
-<<<<<<< HEAD
-      - scodinlab
-
-  frontend:
-    container_name: scodinlab-frontend
-=======
       - codinlab
 
   frontend:
     container_name: codinlab-frontend
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
     build:
       context: ../frontend/.
       dockerfile: ../docker/frontend/dev.Dockerfile
@@ -35,19 +24,11 @@ services:
     volumes:
       - ../frontend:/app
     networks:
-<<<<<<< HEAD
-      - scodinlab
-
-  nginx:
-    image: nginx:latest
-    container_name: scodinlab-nginx
-=======
       - codinlab
 
   nginx:
     image: nginx:latest
     container_name: codinlab-nginx
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
     restart: always
     volumes:
       - ./nginx:/etc/nginx/conf.d
@@ -55,15 +36,8 @@ services:
       - 80:80
       - 443:443
     networks:
-<<<<<<< HEAD
-      - scodinlab
-
-networks:
-  scodinlab:
-=======
       - codinlab
 
 networks:
   codinlab:
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
     driver: bridge

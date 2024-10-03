@@ -18,37 +18,21 @@
     "@mui/lab": "^5.0.0-alpha.158",
     "@mui/material": "^5.15.2",
     "@reduxjs/toolkit": "^2.2.0",
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
     "@solana-mobile/wallet-adapter-mobile": "^2.1.3",
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-adapter-react": "^0.15.35",
     "@solana/wallet-adapter-react-ui": "^0.9.35",
     "@solana/wallet-adapter-wallets": "^0.19.32",
     "@solana/web3.js": "^1.95.3",
     "@svgr/webpack": "^8.1.0",
-<<<<<<< HEAD
-=======
     "@web3-react/core": "^8.2.3",
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
-=======
-    "@svgr/webpack": "^8.1.0",
->>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
     "accept-language": "^3.0.18",
     "apexcharts": "^3.52.0",
     "autoprefixer": "10.4.14",
     "axios": "^1.6.7",
-<<<<<<< HEAD
     "base58-js": "^2.0.0",
-<<<<<<< HEAD
-=======
     "base58-universal": "^2.0.0",
     "bs58": "^6.0.0",
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
-=======
->>>>>>> parent of f145eba4 (Wallet connection have been completed. Login and register have been integrated to frontend and connected with backend. Also responses on some api endpoints have been updated according to needs in frontend)
     "clsx": "^2.0.0",
     "eslint-config-next": "^14.0.4",
     "i18next": "^23.7.7",
@@ -60,7 +44,7 @@
     "next-themes": "^0.2.1",
     "nextjs-progressbar": "^0.0.16",
     "nprogress": "^0.2.0",
-    "react": "^18.2.0",
+    "react": "^18.3.1",
     "react-activity-calendar": "^2.3.5",
     "react-apexcharts": "^1.4.1",
     "react-cookie": "6.1.1",
@@ -70,13 +54,10 @@
     "react-multi-carousel": "^2.8.4",
     "react-redux": "^9.1.0",
     "recharts": "^2.12.7",
+    "tweetnacl": "^1.0.3",
     "yup": "^1.4.0"
   },
   "devDependencies": {
-<<<<<<< HEAD
-    "locize-cli": "^3.6.0"
-=======
     "locize-cli": "7.14.14"
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
   }
 }

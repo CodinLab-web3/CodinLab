@@ -1,11 +1,6 @@
 package public
 
 import (
-<<<<<<< HEAD
-	"sync"
-
-=======
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 	"github.com/Yavuzlar/CodinLab/internal/domains"
 	dto "github.com/Yavuzlar/CodinLab/internal/http/dtos"
 	"github.com/Yavuzlar/CodinLab/internal/http/response"
@@ -19,10 +14,6 @@ type PublicHandler struct {
 	session_store *session.Store
 	dtoManager    *dto.DTOManager
 	clients       map[*domains.Client]bool
-<<<<<<< HEAD
-	mu            sync.Mutex
-=======
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 }
 
 func NewPublicHandler(
@@ -48,8 +39,5 @@ func (h *PublicHandler) Init(router fiber.Router) {
 	})
 	// initialize routes
 	h.initUserRoutes(root)
-<<<<<<< HEAD
-=======
 	h.initNFTRoutes(root)
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 }

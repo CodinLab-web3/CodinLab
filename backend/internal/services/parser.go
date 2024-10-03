@@ -7,10 +7,7 @@ import (
 	"strings"
 
 	"github.com/Yavuzlar/CodinLab/internal/domains"
-<<<<<<< HEAD
-=======
 	service_errors "github.com/Yavuzlar/CodinLab/internal/errors"
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 )
 
 type parserService struct {
@@ -80,8 +77,6 @@ func (s *parserService) GetInventory() (inventory []domains.InventoryP, err erro
 	return
 }
 
-<<<<<<< HEAD
-=======
 func (s *parserService) GetNFTs() (nfts []domains.NFTMetadataP, err error) {
 	// Check if the directory exists
 	err = s.checkDir("object")
@@ -135,7 +130,6 @@ func (s *parserService) GetNFTByID(id int) (nft *domains.NFTMetadataP, err error
 	return
 }
 
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 func (s *parserService) GetLabs() (labs []domains.LabP, err error) {
 	// Check if the directory exists
 	err = s.checkDir("object")

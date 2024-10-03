@@ -9,8 +9,6 @@ type IParserService interface {
 	GetWelcomeBanner() (content []WelcomeContent, err error)
 	GetLabBanner() (content []LabContent, err error)
 	GetRoadBanner() (content []RoadContent, err error)
-<<<<<<< HEAD
-=======
 
 	GetNFTs() (nfts []NFTMetadataP, err error)
 	GetNFTByID(id int) (nft *NFTMetadataP, err error)
@@ -33,7 +31,6 @@ type NFTMetadataP struct {
 type AttributeP struct {
 	TraitType string `json:"trait_type"`
 	Value     string `json:"value"`
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 }
 
 // Inventory represents the information related to an item in inventory.
@@ -53,11 +50,7 @@ type InventoryP struct {
 // Language represents the details of a programming language.
 type LanguageP struct {
 	Lang        string `json:"lang"`
-<<<<<<< HEAD
-	Title       string `json:"title,omitempty"`
-=======
 	Title       string `json:"title"`
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 	Description string `json:"description"`
 	Note        string `json:"note,omitempty"`
 	Hint        string `json:"hint,omitempty"`

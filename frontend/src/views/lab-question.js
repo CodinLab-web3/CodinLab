@@ -10,27 +10,18 @@ import {
   useMediaQuery,
   Button,
   Modal,
-<<<<<<< HEAD
-=======
   Tooltip,
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 } from "@mui/material";
 import TestTubeGreen from "src/assets/icons/icons8-test-tube-100-green.png";
 import TestTubeOrange from "src/assets/icons/icons8-test-tube-100-orange.png";
 import TestTubeRed from "src/assets/icons/icons8-test-tube-100-red.png";
 import LightBulb from "src/assets/icons/light-bulb.png";
 import Image from "next/image";
-<<<<<<< HEAD
-import { use, useEffect, useState } from "react";
-=======
 import { use, useEffect, useRef, useState } from "react";
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 import { getProgrammingId } from "src/data/programmingIds";
 import { useDispatch, useSelector } from "react-redux";
 import { getLabByProgramingId } from "src/store/lab/labSlice";
 import { data } from "autoprefixer";
-<<<<<<< HEAD
-=======
 import { getStop } from "src/store/code/codeSlice";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import axios from "axios";
@@ -111,7 +102,6 @@ const renderDifficulty = (difficulty) => {
       );
   }
 };
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 
 const LabQuestion = ({ language = "", questionId }) => {
   const { lab: labSlice } = useSelector((state) => state);
@@ -120,11 +110,6 @@ const LabQuestion = ({ language = "", questionId }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("smd"));
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
   const [output, setOutput] = useState(""); // we will store the output here
 
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -135,12 +120,6 @@ const LabQuestion = ({ language = "", questionId }) => {
 
   const [labData, setLabData] = useState({
     title: "",
-<<<<<<< HEAD
-    difficulty: "",
-    description: "",
-    questionNote: "",
-    expectedOutput: "",
-=======
     difficulty:"",
     description: "",
     questionNote:"",
@@ -148,7 +127,6 @@ const LabQuestion = ({ language = "", questionId }) => {
     expectedOutput: "",
     hint: "",
     template: ""
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
   });
 
   const [open, setOpen] = useState(false);
@@ -168,26 +146,11 @@ const LabQuestion = ({ language = "", questionId }) => {
     endPoint: 'lab'
   };
 
-<<<<<<< HEAD
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(
-      getLabByProgramingId({
-        labID: questionId,
-        programmingID: programmingID,
-        language: i18n.language,
-      })
-    );
-  }, [language, questionId]);
-
-  useEffect(() => {
-=======
   const editorRef = useRef(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
     if (labSlice.data) {
       setLabData({
         title: labSlice.data[0]?.language?.title,
@@ -203,28 +166,15 @@ const LabQuestion = ({ language = "", questionId }) => {
   }, [labSlice.data]);
 
   const handleRun = (outputData) => {
-<<<<<<< HEAD
-    // this function will be called when the code is run
     setOutput(outputData);
     setIsSubmitted(true);
 
-    // check if the output is correct
-=======
-    setOutput(outputData);
-    setIsSubmitted(true);
-
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
     if (true) {
       setIsCompleted(true);
     } else {
       setIsFailed(true);
     }
   };
-<<<<<<< HEAD
-
-  const handleStop = (outputData) => {
-    // this function will be called when the code is stopped
-=======
   
 
   const handleStop = (outputData) => {
@@ -232,90 +182,11 @@ const LabQuestion = ({ language = "", questionId }) => {
     // but not use it in this component
     // dispatch(getStop())
     
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
     setOutput(outputData);
     setIsSubmitted(false);
     setIsCompleted(false);
   };
 
-<<<<<<< HEAD
-  const renderDifficulty = (difficulty) => {
-    switch (difficulty) {
-      case "easy":
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              gap: "0.4rem",
-              backgroundColor: "#BDEEAF",
-              borderRadius: "0.7rem",
-              py: 1,
-              px: 2,
-            }}
-          >
-            <Image src={TestTubeGreen} alt="easy" width={25} height={25} />
-            <Typography
-              variant="body1"
-              color={"#39CE19"}
-              fontWeight={500}
-              sx={{ textTransform: "capitalize" }}
-            >
-              {" "}
-              {difficulty}{" "}
-            </Typography>
-          </Box>
-        );
-      case "medium":
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              gap: "0.4rem",
-              backgroundColor: "#F3C9A5",
-              borderRadius: "0.7rem",
-              py: 1,
-              px: 2,
-            }}
-          >
-            <Image src={TestTubeOrange} alt="easy" width={25} height={25} />
-            <Typography
-              variant="body1"
-              color={"#F07C1C"}
-              fontWeight={500}
-              sx={{ textTransform: "capitalize" }}
-            >
-              {" "}
-              {difficulty}{" "}
-            </Typography>
-          </Box>
-        );
-      case "hard":
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              gap: "0.4rem",
-              backgroundColor: "#F3B3B3",
-              borderRadius: "0.7rem",
-              py: 1,
-              px: 2,
-            }}
-          >
-            <Image src={TestTubeRed} alt="easy" width={25} height={25} />
-            <Typography
-              variant="body1"
-              color={"#E00404"}
-              fontWeight={500}
-              sx={{ textTransform: "capitalize" }}
-            >
-              {" "}
-              {difficulty}{" "}
-            </Typography>
-          </Box>
-        );
-    }
-  };
-=======
   const handleReset = async () => {
     try {
       const response = await axios({
@@ -350,7 +221,6 @@ const LabQuestion = ({ language = "", questionId }) => {
     );
   }, [language, questionId]);
 
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 
   // Breadcrumbs
   const breadcrums = [
@@ -443,8 +313,6 @@ const LabQuestion = ({ language = "", questionId }) => {
                   {t("labs.question.hint")}{" "}
                 </Typography>
               </Button>
-<<<<<<< HEAD
-=======
               <Tooltip title={t("roads.path.restart.button")}>
               <Button
                 variant="dark"
@@ -456,7 +324,6 @@ const LabQuestion = ({ language = "", questionId }) => {
                 <RestartAltIcon />
               </Button>
             </Tooltip>
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
             </Box>
            
             <Modal
@@ -524,17 +391,11 @@ const LabQuestion = ({ language = "", questionId }) => {
             onRun={handleRun}
             onStop={handleStop}
             leng={language}
-<<<<<<< HEAD
-            defValue={labData.template}
-            title={labData.title}
-            apiData={apiData}
-=======
             // defValue={labData.template}
             title={labData.title}
             apiData={apiData}
             val={labData?.template}
             editorRef={editorRef}
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
           />
 
           {/* Compilation messages after submitting */}
@@ -615,8 +476,4 @@ const LabQuestion = ({ language = "", questionId }) => {
   );
 };
 
-<<<<<<< HEAD
 export default LabQuestion;
-=======
-export default LabQuestion;
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75

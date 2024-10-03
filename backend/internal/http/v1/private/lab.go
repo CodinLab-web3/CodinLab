@@ -94,11 +94,7 @@ func (h *PrivateHandler) GetLabs(c *fiber.Ctx) error {
 	programmingID := c.Params("programmingID")
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-<<<<<<< HEAD
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
-=======
 	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 	if err != nil {
 		return err
 	}
@@ -156,11 +152,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 	programmingID := c.Query("programmingID")
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
-<<<<<<< HEAD
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
-=======
 	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 	if err != nil {
 		return err
 	}
@@ -208,10 +200,7 @@ func (h *PrivateHandler) GetLabByID(c *fiber.Ctx) error {
 func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 	labID := c.Params("labID")
 	programmingID := c.Params("programmingID")
-<<<<<<< HEAD
-=======
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 	userSession := session_store.GetSessionData(c)
 
 	var answerLabDTO dto.AnswerLabDTO
@@ -222,11 +211,7 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 		return err
 	}
 
-<<<<<<< HEAD
-	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
-=======
 	inventoryInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 	if err != nil {
 		return err
 	}
@@ -293,17 +278,11 @@ func (h *PrivateHandler) AnswerLab(c *fiber.Ctx) error {
 func (h *PrivateHandler) ResetLabHistory(c *fiber.Ctx) error {
 	labID := c.Params("labID")
 	programmingID := c.Params("programmingID")
-<<<<<<< HEAD
-	userSession := session_store.GetSessionData(c)
-
-	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID)
-=======
 	language := h.services.UtilService.GetLanguageHeader(c.Get("Language"))
 
 	userSession := session_store.GetSessionData(c)
 
 	programmingInformation, err := h.services.LabRoadService.GetInventoryInformation(programmingID, language)
->>>>>>> 3a9b9de425f75269bdd7cb465063b3ea01be1d75
 	if err != nil {
 		return err
 	}
