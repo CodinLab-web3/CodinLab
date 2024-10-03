@@ -11,6 +11,7 @@ import pathSlice from "./path/pathSlice.js";
 import labSlice from "./lab/labSlice.js";
 import logSlice from "./log/logSlice.js";
 import codeSlice from "./code/codeSlice.js";
+import nftSlice from "./nft/nftSlice.js";
 
 export const store = configureStore({
   reducer: {
@@ -23,7 +24,8 @@ export const store = configureStore({
     path: pathSlice,
     lab: labSlice,
     log: logSlice,
-    code: codeSlice
+    code: codeSlice,
+    nft : nftSlice,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
