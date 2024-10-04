@@ -13,6 +13,7 @@ func NewLabDTOManager() LabDTOManager {
 
 type LabDTO struct {
 	ID         int            `json:"id"`
+	NFTID      int            `json:"nftID"`
 	Languages  LabLanguageDTO `json:"language"`
 	Template   string         `json:"template,omitempty"`
 	IsStarted  bool           `json:"isStarted"`
@@ -22,6 +23,7 @@ type LabDTO struct {
 
 type LabForAllDTO struct {
 	ID         int                  `json:"id"`
+	NFTID      int                  `json:"nftID"`
 	Languages  LabLanguageForAllDTO `json:"language"`
 	IsFinished bool                 `json:"isFinished"`
 	Difficulty int                  `json:"difficulty"`
@@ -55,6 +57,7 @@ func (m *LabDTOManager) ToLabsForAllDTO(labs []LabForAllDTO, isImageExists bool)
 func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTO LabLanguageDTO, template string) LabDTO {
 	return LabDTO{
 		ID:         lab.GetID(),
+		NFTID:      lab.GetNFTID(),
 		Languages:  languagesDTO,
 		Template:   template,
 		IsStarted:  lab.GetIsStarted(),
@@ -66,6 +69,7 @@ func (m *LabDTOManager) ToLabDTO(lab domains.Lab, languagesDTO LabLanguageDTO, t
 func (m *LabDTOManager) ToLabForAllDTO(lab domains.Lab, languagesDTO LabLanguageForAllDTO) LabForAllDTO {
 	return LabForAllDTO{
 		ID:         lab.GetID(),
+		NFTID:      lab.GetNFTID(),
 		Languages:  languagesDTO,
 		IsFinished: lab.GetIsFinished(),
 		Difficulty: lab.GetQuest().GetDifficulty(),
