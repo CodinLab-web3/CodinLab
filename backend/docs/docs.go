@@ -842,6 +842,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/private/nft/tokenaccount/{publicKey}": {
+            "get": {
+                "description": "Get Token Account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web3NFT"
+                ],
+                "summary": "Get Token Account",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Public Key",
+                        "name": "publicKey",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/private/road/answer/{programmingID}/{pathID}": {
             "post": {
                 "description": "This is for answering quests.",
@@ -1349,7 +1381,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/public/nft/metadata/{id}": {
+        "/public/nft/metadata/": {
             "get": {
                 "description": "NFT URI",
                 "consumes": [
@@ -1362,10 +1394,33 @@ const docTemplate = `{
                     "Web3NFT"
                 ],
                 "summary": "NFT URI",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.BaseResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/public/nft/metadata/{id}": {
+            "get": {
+                "description": "Get NFT Metadata By ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Web3NFT"
+                ],
+                "summary": "Get NFT Metadata By ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "NFT ID",
+                        "description": "id",
                         "name": "id",
                         "in": "path",
                         "required": true

@@ -13,6 +13,7 @@ func (h *PrivateHandler) initNFTRoutes(root fiber.Router) {
 	nft.Post("/", h.MintNft)
 	nft.Get("/balance/", h.SetTestBalance)
 	nft.Get("/balance/:publicKey", h.GetBalance)
+	nft.Get("/tokenaccount/:publicKey", h.GetTokenAccount)
 }
 
 // @Tags Web3NFT
@@ -32,17 +33,37 @@ func (h *PrivateHandler) MintNft(c *fiber.Ctx) error {
 		return err
 	}
 
-	nftPublicKey, err := h.services.NFTService.MintNFT(c.Context(), nftMintDTO.NFTID)
+	_, err := h.services.NFTService.MintNFT(c.Context(), nftMintDTO.PublicKey, nftMintDTO.NFTID)
 	if err != nil {
 		return err
 	}
 
-	// FIXME: Normalde bu publicKey session'dan çekilicek
-	if err := h.services.NFTService.TransferNFT(c.Context(), nftPublicKey, nftPublicKey); err != nil {
-		return err
-	}
+	// // FIXME: Normalde bu publicKey session'dan çekilicek
+	// if err := h.services.NFTService.TransferNFT(c.Context(), nftMintDTO.PublicKey, nftPublicKey); err != nil {
+	// 	return err
+	// }
 
 	return response.Response(200, "Mint Successful", nil)
+}
+
+// @Tags Web3NFT
+// @Summary  Get Token Account
+// @Description Get Token Account
+// @Accept json
+// @Produce json
+// @Param publicKey path string true "Public Key"
+// @Success 200 {object} response.BaseResponse{}
+// @Router /private/nft/tokenaccount/{publicKey} [get]
+func (h *PrivateHandler) GetTokenAccount(c *fiber.Ctx) error {
+	publicKey := c.Params("publicKey")
+
+	tokenAccount, err := h.services.NFTService.GetTokenAccount(c.Context(), publicKey)
+	if err != nil {
+		return err
+	}
+	tokenAccountDTO := h.dtoManager.Web3DTOManager.ToTokenAccountDTO(*tokenAccount)
+
+	return response.Response(200, "GetTokenAccount Successful", tokenAccountDTO)
 }
 
 // @Tags Web3NFT
