@@ -79,6 +79,7 @@ type QuestP struct {
 // Lab represents a specific coding lab exercise.
 type LabP struct {
 	ID        int         `json:"id"`
+	NFTID     int         `json:"nftID"`
 	Languages []LanguageP `json:"languages"`
 	Quest     QuestP      `json:"quest"`
 }

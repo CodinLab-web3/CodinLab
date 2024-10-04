@@ -1,0 +1,29 @@
+{
+    "id": 2,
+    "symbol": "PYTHONNFT",
+    "name": "Python Mastery Badge",
+    "image": "https://example.com/logo/python_logo.png",
+    "external_url": "",
+    "uri": "http://localhost/nft/metadata/2",
+    "description": "An exclusive NFT awarded to those who have completed the Python programming course. This badge symbolizes mastery in Python and is a testament to your coding skills.",
+    "attributes": [
+      {
+        "trait_type": "Skill Level",
+        "value": "Expert"
+      },
+      {
+        "trait_type": "Course Completed",
+        "value": "Python Programming"
+      },
+      {
+        "trait_type": "Date Earned",
+        "value": "2024-10-04"
+      },
+      {
+        "trait_type": "Reward",
+        "value": "Exclusive Access to Python Advanced Workshops"
+      }
+    ],
+    "seller_fee_basis_points": 500
+  }
+  
