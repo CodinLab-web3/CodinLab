@@ -87,6 +87,7 @@ const LabInfo = ({ programingId }) => {
 
             <Button
               variant={lab.finished ? "dark" : "light"}
+              disabled={!lab.isImageExists}
               sx={{
                 borderRadius: "16px",
                 marginTop: "20px",

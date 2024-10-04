@@ -29,6 +29,7 @@ const defineRulesFor = (role, permission, permissions) => {
       can(["read"], "roads");
       can(["read"], "labs");
       can(["read"], "settings");
+      can(["read"], "profile");
       break;
 
     default:

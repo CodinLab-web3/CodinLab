@@ -38,6 +38,7 @@ const RoadDetails = ({ language = "" }) => {
   const [programmingIcon, setProgrammingIcon] = useState("images/c.png"); // Programming icon path
   const [title, setTitle] = useState(""); // Road title
   const [description, setDescription] = useState(""); // Road description
+  const [isImageExists, setIsImageExists] = useState(true);
 
   const handleStartRoad = () => {
     // Redirect to the first path of the road
@@ -69,9 +70,11 @@ const RoadDetails = ({ language = "" }) => {
   }, [programmingId, i18n.language]);
 
   useEffect(() => {
+
     if (paths) {
       setIsLoading(paths.loading);
       setError(paths.error);
+      setIsImageExists(paths.data.isImageExists ? true : false);
 
       if (paths.data.paths) {
         setProgrammingIcon(paths.data.iconPath);
@@ -168,6 +171,8 @@ const RoadDetails = ({ language = "" }) => {
                     </Box>
                     <Button
                       variant="contained"
+                      // isImageExists true ise disabled olacak
+                      disabled={!isImageExists}
                       sx={{
                         backgroundColor: "#fff",
                         color: theme.palette.primary.dark,

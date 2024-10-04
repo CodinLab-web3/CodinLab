@@ -118,5 +118,6 @@
   "userlist.edit.content": "Lütfen düzenlemek istediğiniz kullanıcının yeni bilgilerini girin.",
   "roads.path.restart.button": "Yolu baştan başlat",
   "codeEditor.output": "Çıktı",
-  "codeEditor.output.display": "Çıktı burada görüntülenir"
+  "codeEditor.output.display": "Çıktı burada görüntülenir",
+  "Profile" : "Profil"
 }

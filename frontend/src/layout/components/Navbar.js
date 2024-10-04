@@ -17,10 +17,12 @@ import { useNav } from "src/hooks/useNav";
 import Logo from "../../assets/logo/codinlab-logo-light.png";
 import Image from "next/image";
 import WalletConnectionButton from "src/components/Wallet/WalletConnectionButton";
-
+import Person2Icon from '@mui/icons-material/Person2';
+import { useRouter } from "next/router";
 function ResponsiveAppBar() {
   const { logout } = useAuth();
   const { anchorElNav, OpenNavMenu, CloseNavMenu, LogoClick } = useNav();
+  const router = useRouter();
 
   const handleLogout = async () => {
     try {
@@ -29,9 +31,15 @@ function ResponsiveAppBar() {
     }
   };
 
+  const handleProfile = () => {
+    router.push("/profile");
+  };
+
+
   const { t } = useTranslation();
 
   const logoutText = t("logout");
+  const profileText = t("profile"); 
 
   return (
     <AppBar
@@ -144,6 +152,37 @@ function ResponsiveAppBar() {
             <LanguageSelector />
 
             <WalletConnectionButton />
+
+            <IconButton
+              onClick={handleProfile}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: "0.5rem",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.3)",
+                  borderRadius: "5px",
+                },
+              }}
+            >
+              <Person2Icon
+                sx={{
+                  width: 24,
+                  height: 24,
+                }}
+              />
+              <Typography
+                sx={{
+                  fontWeight: 300,
+                  textTransform: "capitalize",
+                  fontFamily: "Outfit",
+                  textAlign: "center",
+                }}
+              >
+                {profileText}
+              </Typography>
+            </IconButton>
 
             <IconButton
               onClick={handleLogout}
