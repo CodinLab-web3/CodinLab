@@ -794,6 +794,27 @@ paths:
       summary: Get Balance
       tags:
       - Web3NFT
+  /private/nft/tokenaccount/{publicKey}:
+    get:
+      consumes:
+      - application/json
+      description: Get Token Account
+      parameters:
+      - description: Public Key
+        in: path
+        name: publicKey
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: Get Token Account
+      tags:
+      - Web3NFT
   /private/road/{programmingID}:
     get:
       consumes:
@@ -1119,13 +1140,28 @@ paths:
       summary: Logout
       tags:
       - Auth
-  /public/nft/metadata/{id}:
+  /public/nft/metadata/:
     get:
       consumes:
       - application/json
       description: NFT URI
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.BaseResponse'
+      summary: NFT URI
+      tags:
+      - Web3NFT
+  /public/nft/metadata/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get NFT Metadata By ID
       parameters:
-      - description: NFT ID
+      - description: id
         in: path
         name: id
         required: true
@@ -1137,7 +1173,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.BaseResponse'
-      summary: NFT URI
+      summary: Get NFT Metadata By ID
       tags:
       - Web3NFT
   /public/nft/version:

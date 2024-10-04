@@ -1,0 +1,29 @@
+{
+    "id": 3,
+    "symbol": "JSNFT",
+    "name": "JavaScript Mastery Badge",
+    "image": "https://example.com/logo/js_logo.png",
+    "external_url": "",
+    "uri": "http://localhost/nft/metadata/3",
+    "description": "An exclusive NFT awarded to those who have completed the JavaScript programming course. This badge symbolizes mastery in JavaScript and is a testament to your coding skills.",
+    "attributes": [
+      {
+        "trait_type": "Skill Level",
+        "value": "Advanced"
+      },
+      {
+        "trait_type": "Course Completed",
+        "value": "JavaScript Programming"
+      },
+      {
+        "trait_type": "Date Earned",
+        "value": "2024-10-05"
+      },
+      {
+        "trait_type": "Reward",
+        "value": "Exclusive Access to JavaScript Advanced Workshops"
+      }
+    ],
+    "seller_fee_basis_points": 500
+  }
+  

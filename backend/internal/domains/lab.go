@@ -175,6 +175,7 @@ func (l *LanguageLab) SetHint(hint string) {
 // Lab represents a specific coding lab exercise.
 type Lab struct {
 	id            int
+	nftID         int
 	programmingID int
 	languages     []LanguageLab
 	quest         Quest
@@ -189,6 +190,14 @@ func (l *Lab) GetID() int {
 
 func (l *Lab) SetID(id int) {
 	l.id = id
+}
+
+func (l *Lab) GetNFTID() int {
+	return l.nftID
+}
+
+func (l *Lab) SetNFTID(nftID int) {
+	l.nftID = nftID
 }
 
 func (l *Lab) GetProgrammingID() int {
@@ -272,9 +281,10 @@ func NewLanguageLab(lang, title, description, note, hint string) *LanguageLab {
 }
 
 // NewLab creates a new instance of Lab
-func NewLab(id, programmingID int, languages []LanguageLab, quest Quest, isStarted, isFinished bool) *Lab {
+func NewLab(id, nftID, programmingID int, languages []LanguageLab, quest Quest, isStarted, isFinished bool) *Lab {
 	return &Lab{
 		id:            id,
+		nftID:         nftID,
 		languages:     languages,
 		programmingID: programmingID,
 		quest:         quest,

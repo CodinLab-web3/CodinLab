@@ -56,7 +56,7 @@ func (s *labService) getAllLabs(userID string) ([]domains.Lab, error) {
 
 		labIDString := strconv.Itoa(lab.ID)
 		for _, lang := range lab.Quest.CodeTemplates {
-			newLab := domains.NewLab(lab.ID, 0, languages, *quest, false, false)
+			newLab := domains.NewLab(lab.ID, lab.NFTID, 0, languages, *quest, false, false)
 			programmingID := strconv.Itoa(lang.ProgrammingID)
 			logStartedStatus, err := s.logService.GetAllLogs(context.TODO(), userID, programmingID, labIDString, domains.TypeLab, domains.ContentStarted)
 			if err != nil {
