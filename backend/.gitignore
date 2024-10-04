@@ -1,0 +1,10 @@
+# Logs
+logs
+*.log
+
+.DS_Store
+
+tmp/
+*.db
+
+usercodes/

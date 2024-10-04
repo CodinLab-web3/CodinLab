@@ -1,0 +1,71 @@
+[
+    {
+        "id": 1,
+        "name": "C++",
+        "dockerImage": "gcc:latest",
+        "labDir": "object/labs",
+        "pathDir": "object/paths/c++",
+        "iconPath": "images/c++.png",
+        "cmd": ["sh", "-c", "g++ -o main main.cpp && ./main"],
+        "bashCmd":  ["bash", "-c", "./main.sh"],
+        "fileExtension": "cpp",
+        "languages": [
+            {
+                "lang": "en",
+                "title": "What is C++",
+                "description": "Learn the basics of C++ programming"
+            },
+            {
+                "lang": "tr",
+                "title": "C++ nedir?",
+                "description": "C++'ın temellerini öğrenin."
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "GO",
+        "dockerImage": "golang:latest",
+        "labDir": "object/labs",
+        "pathDir": "object/paths/golang",
+        "iconPath": "images/go.png",
+        "cmd": ["sh","-c","go install golang.org/x/tools/cmd/goimports@latest && goimports -w ../main.go && go run ../main.go"],
+        "bashCmd":  ["bash", "-c", "../main.sh"],
+        "fileExtension": "go",
+        "languages": [
+            {
+                "lang": "en",
+                "title": "What is Go",
+                "description": "Learn the basics of Go programming"
+            },
+            {
+                "lang": "tr",
+                "title": "Go nedir?",
+                "description": "Go programlama dilinin temellerini öğrenin."
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Python",
+        "dockerImage": "python:latest",
+        "labDir": "object/labs",
+        "pathDir": "object/paths/python",
+        "iconPath": "images/python.png",
+        "cmd": ["sh", "-c", "python ../main.py"],
+        "bashCmd": ["bash", "-c", "../main.sh"],
+        "fileExtension": "py",
+        "languages": [
+            {
+                "lang": "en",
+                "title": "What is Python",
+                "description": "Learn the basics of Python programming"
+            },
+            {
+                "lang": "tr",
+                "title": "Python nedir?",
+                "description": "Python programlama dilinin temellerini öğrenin."
+            }
+        ]
+    }
+]
